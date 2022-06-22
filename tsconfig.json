@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true, //
+    "isolatedModules": false, //
+    "strict": true,
+    "noImplicitAny": false, //
+    "useUnknownInCatchVariables": false, //
+    "skipLibCheck": true,
+    "inlineSourceMap": true //
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "lib": ["esnext"]
+}
