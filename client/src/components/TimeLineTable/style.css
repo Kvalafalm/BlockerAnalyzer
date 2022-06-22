@@ -1,0 +1,31 @@
+.tableTimeLine{
+  display:flex;
+  flex-wrap:wrap;
+}
+.item{
+  width:calc( ( 100% - 12px ) / 4 );
+  margin:0 0 5px;
+}
+.item:nth-child(4n-1){
+  margin-left:4px;
+  margin-right:4px;
+}
+
+.red {
+background: red;
+}
+
+.yellow{
+  background: yellow;
+}
+
+.green{
+    background: green;
+}
+
+.blue{
+      background: blue;
+}
+.Table{
+    width: 800px;
+}

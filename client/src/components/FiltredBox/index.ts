@@ -1,0 +1,1 @@
+export { FiltredBox } from "./FiltredBox"

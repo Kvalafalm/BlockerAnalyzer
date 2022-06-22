@@ -1,0 +1,1 @@
+export { BublecharPage } from "./BublecharPage"

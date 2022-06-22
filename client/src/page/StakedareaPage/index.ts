@@ -1,0 +1,1 @@
+export { StakedareaPage } from "./StakedareaPage"

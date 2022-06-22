@@ -1,0 +1,7 @@
+{
+  "trailingComma": "es5",
+  "proseWrap": "never",
+  "arrowParens": "avoid",
+  "semi": false,
+  "parser": "babel"
+}

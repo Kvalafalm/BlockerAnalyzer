@@ -1,0 +1,1 @@
+export { HistogramPage } from "./HistogramPage"
