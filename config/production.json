@@ -1,7 +1,0 @@
-{
-  "port": 5000,
-  "jwtSecretAccessToken": "24e3vqeHndRewn5N8f9H1oNYKWHvpZbfiRmfHee1fghP31W4fD5NLiHV5a3OzcnaXVkZqh2f2fuRW8azGU",
-  "jwtSecretRefreshToken": "2HvpZbfiRmfHee1fghP31W4fD5NLiHV5a3OzcnaXVkZqh2f2fuRW8azGU",
-  "mongoUri": "mongodb+srv://testuser:1234qwer@cluster0.gs8g3.mongodb.net/JiraAnaliticsDatabase?retryWrites=true&w=majority",
-  "baseUrl": "http://localhost:5000"
-}
