@@ -9,7 +9,7 @@ import {
   addBlockersFromChangeLog,
 } from './ImportData-library.js';
 import moment from 'moment';
-import ApiError from '../../utils/exceptions/api_error.js';
+import ApiError from '../../utils/exceptions/api_error';
 import projectServices from '../project/project-services.js';
 
 class importDataServices {

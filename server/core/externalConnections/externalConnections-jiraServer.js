@@ -1,13 +1,15 @@
 import fetch from 'node-fetch';
 import config from 'config';
-import ApiError from '../../utils/exceptions/api_error.js';
+import ApiError from '../../utils/exceptions/api_error';
 
-const authToken = btoa(`${config.get('jiraUser')}:${config.get('jiraPassword')}`)
+const authToken = btoa(
+  `${config.get('jiraUser')}:${config.get('jiraPassword')}`
+);
 
 class jiraConnections {
   async getIssuesByID(issuesList, fields = '', expand = '', params) {
     const requestUrl = `https://${config.get('jira')}/rest/api/latest/search`;
-    
+
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Basic ${authToken}`,

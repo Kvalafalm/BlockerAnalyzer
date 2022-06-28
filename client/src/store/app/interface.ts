@@ -1,5 +1,7 @@
 import { Moment } from "moment";
 
+type BAdate = Moment | null
+
 export const appActionTypes = {
   SET_DATA: "APP.SET_DATA",
   ADD_DATAJSON: "APP.ADD_DATAJSON",
@@ -24,7 +26,6 @@ export interface actionPayload {
   type: string;
   payload: any;
 }
-
 
 export interface RootState {
   appReducer: iAppReducerState
@@ -59,8 +60,8 @@ export interface dataRow {
   y: number;
   value: number;
   time: number;
-  start: Moment | null;
-  end: Moment | null;
+  start: BAdate;
+  end: BAdate;
   priority: string;
   project: string;
   typeIssue: string;
@@ -72,8 +73,8 @@ export interface dataJsonRow {
   idBloker: string;
   value: number;
   time: number;
-  start: Moment | null;
-  end: Moment | null;
+  start: BAdate;
+  end: BAdate;
   priority: string;
   project: string;
   typeIssue: string;
@@ -81,14 +82,10 @@ export interface dataJsonRow {
 }
 
 export interface filter {
-/*   id: string;
-  color: string;
-  x: number; */
   priorites: Array<string>;
-  start: Moment | null;
-  end: Moment | null;
+  start: BAdate;
+  end: BAdate;
   statuses: Array<string>;
-/*   time: number; */
   projects: Array<string>;
   typesTask: Array<string>;
   tags: Array<string>;

@@ -1,5 +1,5 @@
 /* const jiraConnections = require('../externalConnections/jiraConnections'); */
-import ApiError from '../../utils/exceptions/api_error.js';
+import ApiError from '../../utils/exceptions/api_error';
 import issueServices from './issue-services.js';
 
 class issueController {
