@@ -14,4 +14,4 @@ const schema = new Schema({
   lastRequest: { type: Map },
 });
 
-export default model('project', schema);
+export default model('space', schema);

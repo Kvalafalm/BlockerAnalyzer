@@ -6,7 +6,7 @@ import routerImportData from './server/core/ImportData/ImportData-routes.js';
 import issueRouter from './server/core/issue/issue-routes.js';
 import accountRouter from './server/core/account/account-routes.js'; 
 import blockerRouter from './server/core/bloker/Blocker-routes.js';
-import routerProject from './server/core/project/project-routes.js';
+import routerSpace from './server/core/space/space-routes';
 import path from 'path';
 import errorMiddleware from './server/middleware/error.middleware';
 
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use('/api/v1/blocker', blockerRouter);
 app.use('/api/v1/importData', routerImportData);
-app.use('/api/v1/project', routerProject);
+app.use('/api/v1/space', routerSpace);
 app.use('/api/v1/issue', issueRouter);
 app.use('/api/v1/account', accountRouter); 
 

@@ -143,7 +143,7 @@ export const appActions = {
     dispatch(appActions.setCurrentSpace(id))
   },
   downloadSpaces: () => async (dispatch: any) => {
-    const RequestUrl = `api/v1/project/list/`
+    const RequestUrl = `api/v1/space/list/`
     const headers = {
       "Content-Type": "application/json",
     }

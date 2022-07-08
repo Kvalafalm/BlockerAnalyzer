@@ -10,7 +10,7 @@ import {
 } from './ImportData-library.js';
 import moment from 'moment';
 import ApiError from '../../utils/exceptions/api_error';
-import projectServices from '../project/project-services';
+import spaceServices from '../space/space-services';
 
 class importDataServices {
   async ImportIssuesFromKanbanBoard(
@@ -29,8 +29,8 @@ class importDataServices {
       EndDate: moment(EndDate),
       choiceByUpdateDate,
     };
-    const { _id } = await projectServices.getProjectByExternalId(idboard);
-    if ( !_id ) {
+    const { _id } = await spaceServices.getProjectByExternalId(idboard);
+    if (!_id) {
       return null
     }
     const issues = await externalConnectionsService.getIssuesKeyFromKanbanBoard(
@@ -139,7 +139,7 @@ class importDataServices {
     if (projectStatuses.length === 0) {
       return false;
     }
-    const statuses = projectServices.updateProject(projectId, {
+    const statuses = spaceServices.updateSpace(projectId, {
       statuses: projectStatuses,
     });
     return statuses;
@@ -161,7 +161,7 @@ class importDataServices {
     if (projectStatuses.length === 0) {
       return false;
     }
-    const statuses = projectServices.updateOrCreateProject(projectId, {
+    const statuses = spaceServices.updateOrCreateSpace(projectId, {
       statuses: projectStatuses,
     });
     return statuses;
