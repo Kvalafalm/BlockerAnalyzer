@@ -3,7 +3,7 @@ import BlockerController from './Blocker-controller.js';
 
 const blockerRouter = Router();
 
-blockerRouter.get('/list', BlockerController.getList);
+blockerRouter.get('/list/:id', BlockerController.getList);
 blockerRouter.post('/', BlockerController.setBlocker);
 
 export default blockerRouter;

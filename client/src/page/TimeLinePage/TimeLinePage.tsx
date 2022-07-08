@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { iAppReducerState, RootState } from "../../store/app/interface"
+import { iAppReducerState } from "../../store/app/interface"
+import { RootState } from "../../store/reducers"
 import Box from "@mui/material/Box"
 import FormLabel from "@mui/material/FormLabel"
 import FormControl from "@mui/material/FormControl"

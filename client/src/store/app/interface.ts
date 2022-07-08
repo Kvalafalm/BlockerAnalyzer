@@ -20,20 +20,23 @@ export const appActionTypes = {
   SET_TIMELINEDATA: "APP.SET_TIMELINEDATA",
   CLEAR_FILTER: "APP.CLEAR_FILTER",
   SET_TIMELINEDATA_STATUSES: "APP.SET_TIMELINEDATA_STATUSES",
+  SET_SPACES: "APP.SET_SPACES",
+  SET_CURRENTSPACE: "APP.SET_CURRENTSPACE",
 } as const
+
+export interface Space {
+  id: string,
+  name: string,
+}
 
 export interface actionPayload {
   type: string;
   payload: any;
 }
 
-export interface RootState {
-  appReducer: iAppReducerState
-}
-
 export interface iAppReducerState {
-  dataJson: Array<dataJsonRow>;
-  dataPure: Array<any>;
+  dataJson: Array<dataJsonRow>;//remove to dataReduce
+  dataPure: Array<any> | null;//remove to dataReduce
   tags: Array<string>;
   typesTask: Array<string>;
   page: string;
@@ -43,9 +46,12 @@ export interface iAppReducerState {
   priorites: Array<string>;
   projects: Array<string>;
   statuses: Array<string>;
-  data: Array<dataRow>;
-  dataTimeline:Array<any>;
-  TimeLineStatuses: Array<any>
+  data: Array<dataRow>;//remove to dataReduce
+  dataTimeline: Array<any>;//remove to dataReduce
+  TimeLineStatuses: Array<any>//remove to dataReduce
+
+  spaces: Array<Space>;
+  currentSpaceId: string;
 }
 
 export interface dataRow {

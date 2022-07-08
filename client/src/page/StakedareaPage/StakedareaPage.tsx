@@ -3,7 +3,8 @@ import { useSelector } from "react-redux"
 import { Checkbox, FormControlLabel } from "@mui/material"
 import { useState } from "react"
 import { groupByType, useStakedAreaHook } from "./StakedareaPageHooks"
-import { iAppReducerState, RootState } from "../../store/app/interface"
+import { iAppReducerState } from "../../store/app/interface"
+import { RootState } from "../../store/reducers"
 
 export const StakedareaPage = () => {
   const { data, tags } = useSelector(

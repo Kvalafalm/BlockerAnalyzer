@@ -1,11 +1,10 @@
 import moment from "moment"
 import {
   actionPayload,
-  appActionTypes,
-  dataJsonRow,
+  dataActionTypes,
+  dataFiltredRow,
   dataRow,
   filter,
-  iAppReducerState,
 } from "./interface"
 
 const initialStateFilter: filter = {
@@ -18,7 +17,7 @@ const initialStateFilter: filter = {
   tags: [],
 }
 
-const initialState: iAppReducerState = {
+const initialState = {
   dataJson: [],
   dataPure: null,
   tags: [],
@@ -27,26 +26,21 @@ const initialState: iAppReducerState = {
   errors: [],
   showFilter: false,
   filter: { ...initialStateFilter },
-  priorites: [],
   projects: [],
-  statuses: [],
   data: [],
   dataTimeline: [],
-  TimeLineStatuses: [],
-  spaces: [],
-  currentSpaceId: '',
 }
 
-export const appReducer = (state = initialState, action: actionPayload) => {
+export const dataReducer = (state = initialState, action: actionPayload) => {
   switch (action.type) {
-    case appActionTypes.SET_DATA:
+    case dataActionTypes.SET_DATA:
       return { ...state, dataPure: action.payload }
-    case appActionTypes.ADD_DATAJSON:
-      const dataJson: Array<dataJsonRow> = state.dataJson.slice()
-      action.payload.forEach((element: dataJsonRow): void => {
+    case dataActionTypes.ADD_DATAJSON:
+      const dataJson: Array<dataFiltredRow> = state.dataJson.slice()
+      action.payload.forEach((element: dataFiltredRow): void => {
         if (
           !dataJson.some(
-            (e: dataJsonRow) => {
+            (e: dataFiltredRow) =>{
               return e.idBloker === element.idBloker && e.id === element.id
             }
           )
@@ -55,52 +49,48 @@ export const appReducer = (state = initialState, action: actionPayload) => {
         }
       })
       return { ...state, dataJson, data: FilteringData(dataJson, state.filter) }
-    case appActionTypes.SET_TAGS:
+    case dataActionTypes.SET_TAGS:
       return { ...state, tags: action.payload }
-    case appActionTypes.SET_STATUSES:
+    case dataActionTypes.SET_STATUSES:
       return { ...state, statuses: action.payload }
-    case appActionTypes.SET_PRIORITES:
+    case dataActionTypes.SET_PRIORITES:
       return { ...state, priorites: action.payload }
-    case appActionTypes.SET_TYPESTASK:
+    case dataActionTypes.SET_TYPESTASK:
       return { ...state, typesTask: action.payload }
-    case appActionTypes.SET_PROJECTS:
+    case dataActionTypes.SET_PROJECTS:
       return { ...state, projects: action.payload }
-    case appActionTypes.SET_PAGE:
+    case dataActionTypes.SET_PAGE:
       return { ...state, page: action.payload }
-    case appActionTypes.PUSH_ERROR:
+    case dataActionTypes.PUSH_ERROR:
       const errors: Array<any> = state.errors.slice()
       errors.push(action.payload)
       return { ...state, errors }
-    case appActionTypes.CLEAR_ERRORS:
+    case dataActionTypes.CLEAR_ERRORS:
       return { ...state, errors: [] }
-    case appActionTypes.SET_TIMELINEDATA:
+    case dataActionTypes.SET_TIMELINEDATA:
       return { ...state, dataTimeline: action.payload }
-    case appActionTypes.SWITCH_FILTER:
+    case dataActionTypes.SWITCH_FILTER:
       return { ...state, showFilter: action.payload }
-    case appActionTypes.CLEAR_DATAJSON:
+    case dataActionTypes.CLEAR_DATAJSON:
       return { ...state, dataJson: [], dataPure: null }
-    case appActionTypes.SET_SPACES:
-      return { ...state, spaces: action.payload }
-    case appActionTypes.SET_CURRENTSPACE:
-      return { ...state, currentSpaceId: action.payload }
-    case appActionTypes.SET_FILTER:
+    case dataActionTypes.SET_FILTER:
       return {
         ...state,
         filter: action.payload,
         data: FilteringData(state.dataJson, action.payload),
       }
-    case appActionTypes.SET_TIMELINEDATA_STATUSES:
+    case dataActionTypes.SET_TIMELINEDATA_STATUSES:
       return {
         ...state,
         TimeLineStatuses: action.payload,
       }
-    case appActionTypes.CLEAR_FILTER:
+    case dataActionTypes.CLEAR_FILTER:
       return {
         ...state,
         filter: { ...initialStateFilter },
         data: state.dataJson.slice(),
       }
-    case appActionTypes.CLEAN:
+    case dataActionTypes.CLEAN:
       return { ...initialState }
     default:
       return state

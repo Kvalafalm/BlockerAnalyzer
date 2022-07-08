@@ -2,7 +2,8 @@ import pkg from 'mongoose';
 const { Schema, model } = pkg;
 
 const schema = new Schema({
-  projectId: { type: String },
+  externalId: { type: String },
+  name: { type: String },
   statuses: [
     {
       name: { type: String },
@@ -10,6 +11,7 @@ const schema = new Schema({
       typeOfStatus: { type: Number },
     },
   ],
+  lastRequest: { type: Map },
 });
 
 export default model('project', schema);

@@ -4,10 +4,13 @@ import BlockerServices from './Blocker-services.js';
 class BlockerController {
   async getList(req, res, next) {
     try {
-      //project;
-      const dataList = await BlockerServices.getBlockersList();
+      const { id } = req?.params;
+      let result;
+      if (id) {
+        result = await BlockerServices.getBlockersList(id);
+      }
       await res.status(200).json({
-        result: dataList,
+        result,
       });
     } catch (e) {
       next(e);

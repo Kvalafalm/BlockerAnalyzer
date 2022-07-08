@@ -12,7 +12,8 @@ import {
 import SaveIcon from "@mui/icons-material/Save"
 import { IconButton } from "@mui/material"
 import { useEditDataHook } from "./EditDataHooks"
-import { iAppReducerState, RootState } from "../../store/app/interface"
+import { iAppReducerState } from "../../store/app/interface"
+import { RootState } from "../../store/reducers"
 
 export const EditData = () => {
   const { dataJson } = useSelector(state => state.appReducer)

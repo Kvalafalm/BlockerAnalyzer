@@ -1,14 +1,15 @@
+import mongoose from 'mongoose';
 import BlockerModel from './Blocker-model.js';
 import BlockerView from './Blocker-view.js';
 class BlockerServices {
-  async getBlockersList() {
-    const documents = await BlockerModel.find();
+  async getBlockersList(id) {
+    const documents = await BlockerModel.find({ idSpace: mongoose.Types.ObjectId(id) });
     const BlockersView = await BlockerView.prepareArrayOfBlockers(documents);
     return BlockersView;
   }
 
-  async getBlockersListById(id) {
-    const documents = await BlockerModel.find({ idIssue: id });
+  async getBlockersListById(idIssue) {
+    const documents = await BlockerModel.find({ idIssue });
     return documents;
   }
 

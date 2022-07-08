@@ -106,6 +106,11 @@ class externalConnectionsService {
     const uniqueStatuses = statuses.filter(item => itemCheck(item));
     return uniqueStatuses;
   }
+
+  async getProjectList() {
+    const data = await jiraConnections.getProjectList();
+    return data;
+  }
 }
 
 export default new externalConnectionsService();

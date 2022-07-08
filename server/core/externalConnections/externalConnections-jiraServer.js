@@ -151,6 +151,30 @@ class jiraConnections {
       throw ApiError.BadRequest('Error request to Jira', error);
     }
   }
+
+  async getProjectList(id) {
+    const requestUrl = `https://${config.get('jira')}/rest/agile/1.0/board`;
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${authToken}`,
+    };
+
+    const options = {
+      method: 'GET',
+      headers: headers,
+    };
+
+    try {
+      const response = await fetch(requestUrl, options);
+      if (response.status === 404) {
+        throw ApiError.BadRequest('Error request to Jira', error);
+      }
+      const { values } = await response.json();
+      return values;
+    } catch (error) {
+      throw ApiError.BadRequest('Error request to Jira', error);
+    }
+  }
 }
 
 export default new jiraConnections();

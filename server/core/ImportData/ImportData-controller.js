@@ -7,7 +7,7 @@ class ImportDataController {
       const { id } = req?.params;
       let result;
       if (id) {
-        result = await ImportDataServices.importIssuesByID([id]);
+        result = await ImportDataServices.importIssuesByID([id],"spaceId");
       }
 
       await res.status(200).json({
@@ -40,6 +40,29 @@ class ImportDataController {
     try {
       const { id } = req?.params;
       const result = await ImportDataServices.importProjectStatuses(id);
+      await res.status(200).json({
+        result: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async importProject(req, res, next) {
+    try {
+      const { id } = req?.params;
+      const result = await ImportDataServices.importProject(id);
+      await res.status(200).json({
+        result: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getProjects(req, res, next) {
+    try {
+      const result = await ImportDataServices.getProjects();
       await res.status(200).json({
         result: result,
       });

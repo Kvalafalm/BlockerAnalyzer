@@ -1,6 +1,7 @@
 import { Histogram } from "../../components"
 import { useSelector } from "react-redux"
-import { iAppReducerState, RootState } from "../../store/app/interface"
+import { iAppReducerState } from "../../store/app/interface"
+import { RootState } from "../../store/reducers"
 import { useHistogramPageHooks } from "./HistogramPageHooks"
 import { useMemo } from "react"
 

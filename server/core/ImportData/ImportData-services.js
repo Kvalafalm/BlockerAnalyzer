@@ -10,7 +10,7 @@ import {
 } from './ImportData-library.js';
 import moment from 'moment';
 import ApiError from '../../utils/exceptions/api_error';
-import projectServices from '../project/project-services.js';
+import projectServices from '../project/project-services';
 
 class importDataServices {
   async ImportIssuesFromKanbanBoard(
@@ -29,7 +29,10 @@ class importDataServices {
       EndDate: moment(EndDate),
       choiceByUpdateDate,
     };
-
+    const { _id } = await projectServices.getProjectByExternalId(idboard);
+    if ( !_id ) {
+      return null
+    }
     const issues = await externalConnectionsService.getIssuesKeyFromKanbanBoard(
       params
     );
@@ -37,11 +40,11 @@ class importDataServices {
     if (issues.length === 0) {
       return { result: 'empty array' };
     }
-    const result = this.importIssuesByID(issues);
+    const result = this.importIssuesByID(issues, _id);
     return result;
   }
 
-  async importIssuesByID(keys) {
+  async importIssuesByID(keys, currentSpace) {
     const StartDate = moment();
     const issues = await externalConnectionsService.getIssuesByID(keys);
     let blockerList = await [];
@@ -60,7 +63,7 @@ class importDataServices {
         if (startInValid) {
           throw new ApiError(404, 404, 'Ошибка');
         }
-
+        element.idSpace = currentSpace;
         if (!element.end?.isValid()) {
           element.end = undefined;
         }
@@ -72,7 +75,7 @@ class importDataServices {
         errorsCount += 1;
       }
     }
-     const time = moment.duration(moment().diff(StartDate)).seconds();
+    const time = moment.duration(moment().diff(StartDate)).seconds();
     return {
       totalFromBoard: keys.length,
       keys,
@@ -92,9 +95,8 @@ class importDataServices {
       idIssue: JiraIssue.key,
       priority: JiraIssue.fields.priority.id - 1,
       titleIssue: JiraIssue.fields.summary,
-      linkIssue: `${config.get('protocol')}://${config.get('jira')}/browse/${
-        JiraIssue.key
-      }`,
+      linkIssue: `${config.get('protocol')}://${config.get('jira')}/browse/${JiraIssue.key
+        }`,
       typeIssue: JiraIssue.fields.issuetype.name,
     };
 
@@ -137,9 +139,35 @@ class importDataServices {
     if (projectStatuses.length === 0) {
       return false;
     }
-    const statuses = projectServices.setStatusList(projectId, projectStatuses);
+    const statuses = projectServices.updateProject(projectId, {
+      statuses: projectStatuses,
+    });
     return statuses;
   }
+
+
+  async getProjects() {
+    const projects = await externalConnectionsService.getProjectList();
+    if (projects.length === 0) {
+      return false;
+    }
+    return projects;
+  }
+
+  async importProject(projectId) {
+    const projectStatuses = await externalConnectionsService.getProjectStatuses(
+      projectId
+    );
+    if (projectStatuses.length === 0) {
+      return false;
+    }
+    const statuses = projectServices.updateOrCreateProject(projectId, {
+      statuses: projectStatuses,
+    });
+    return statuses;
+  }
+
+
 }
 
 export default new importDataServices();

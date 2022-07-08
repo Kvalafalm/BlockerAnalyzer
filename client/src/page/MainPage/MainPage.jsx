@@ -25,14 +25,15 @@ import {
 } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import IconButton from "@mui/material/IconButton"
-import { useEffect, useState } from "react"
+import { useLayoutEffect, useState } from "react"
 import MuiAppBar from "@mui/material/AppBar"
 import { Box } from "@mui/system"
 import { appActions } from "../../store/app"
 import Stack from "@mui/material/Stack"
-import { FiltredBox, Settings } from "../../components"
+import { FiltredBox, ProjectSelect, Settings } from "../../components"
 import { Timeline } from "@material-ui/icons"
 import { Help } from "@mui/icons-material"
+import { dataActions } from "../../store/data"
 //import HelpIcon from '@mui/icons-material/Help';
 const drawerWidth = 130
 
@@ -85,32 +86,25 @@ export const MainPage = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   //const { page } = useSelector(state => state.appReducer)
+ 
   const [open, setOpen] = useState(true)
-
   const [showFilter, setShowFilter] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
 
-  const handleDrawerOpen = () => {
-    setOpen(true)
-  }
-
-  const handleDrawerClose = () => {
-    setOpen(false)
-  }
-
-  useEffect(() => {
-    dispatch(appActions.uploadDataFromServer())
+  useLayoutEffect(() => {
+    dispatch(appActions.downloadStartingDataFromServer())
   }, [])
 
   const handleChangeSwitch = () => {
     setShowFilter(!showFilter)
   }
 
-  const handleShowSettings = () => {
-    setShowSettings(true)
+  const handleShowCloseSettings = () => {
+    setShowSettings(!showSettings)
   }
-  const handleCloseSettings = () => {
-    setShowSettings(false)
+
+  const handleDrawerOpenClose = () => {
+    setOpen(!open)
   }
 
   const label = { inputProps: { "aria-label": "Switch demo" } }
@@ -123,7 +117,7 @@ export const MainPage = () => {
           <Button
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawerOpenClose}
             edge="start"
             sx={{
               marginRight: "36px",
@@ -132,21 +126,25 @@ export const MainPage = () => {
           >
             Sidebar
           </Button>
+          <ProjectSelect />
+          
           <Typography variant="h6" noWrap component="div">
             Blockers analyzer
           </Typography>
-          <IconButton>
-            <SettingsIcon color="disabled" onClick={handleShowSettings} />
+          <IconButton onClick={handleShowCloseSettings }>
+            <SettingsIcon   />
           </IconButton>
-          <IconButton>
-            <Help
-              color="disabled"
-              onClick={() => {
+          <IconButton onClick={() => {
                 history.push("/instruction")
-              }}
+              }}>
+            <Help
+              
+              
             />
           </IconButton>
+         
         </Toolbar>
+        
       </AppBar>
 
       <Drawer
@@ -163,7 +161,7 @@ export const MainPage = () => {
         open={open}
       >
         <DrawerHeader>
-          <Button onClick={handleDrawerClose}>Закрыть</Button>
+          <Button onClick={handleDrawerOpenClose}>Закрыть</Button>
         </DrawerHeader>
         <Divider />
         <List>
@@ -267,7 +265,7 @@ export const MainPage = () => {
         </SwitchR>
       </Main>
       <FiltredBox show={showFilter} />
-      <Settings open={showSettings} onClose={handleCloseSettings}></Settings>
+      <Settings open={showSettings} onClose={handleShowCloseSettings}></Settings>
     </Box>
   )
 }

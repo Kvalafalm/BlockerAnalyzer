@@ -18,6 +18,7 @@ import moment, { Moment } from "moment"
 import { iAppReducerState } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
 import { RangeInput } from "@mui/lab/DateRangePicker/RangeTypes"
+import { iDataReducerState } from "../../store/data/interface"
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -26,12 +27,16 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }))
 export const FiltredBox = (props: any) => {
-  const { tags, typesTask, projects, priorites, filter, statuses } =
+  const { tags, typesTask, projects, priorites, statuses } =
     useSelector((state: RootState): iAppReducerState => state.appReducer)
+
+  const { filter } =
+    useSelector((state: RootState): iDataReducerState => state.dataReducer)
+
   const valueStart: RangeInput<Moment> = [filter.start, filter.end]
   const [value, setValue] = useState(valueStart)
 
-  const [statusesCheck, setStatusesCheck] = useState(filter.projects)
+  const [statusesCheck, setStatusesCheck] = useState(filter.statuses)
   const [projectsCheck, setProjectsCheck] = useState(filter.projects)
   const [prioritesCheck, setPrioritesCheck] = useState(filter.priorites)
   const [tagsCheck, setTagsCheck] = useState(filter.tags)
@@ -56,7 +61,7 @@ export const FiltredBox = (props: any) => {
       tags: tagsCheck ?? null,
       priorites: prioritesCheck ?? null,
       typesTask: typesTaskChosen ?? null,
-      statuses: statusesCheck?? null
+      statuses: statusesCheck ?? null
     }
 
     dispatch(appActions.setFilter(filterData))

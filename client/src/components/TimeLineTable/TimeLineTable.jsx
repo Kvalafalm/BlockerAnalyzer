@@ -11,7 +11,6 @@ export const TimeLineTable = props => {
         <div className="item">Time</div>
         {props.statuses &&
           props.statuses.map(element => {
-            debugger
             const className = `item ${element.color}`
 
             return (

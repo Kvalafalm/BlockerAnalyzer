@@ -1,10 +1,10 @@
 import pkg from 'mongoose';
-const { Schema, model } = pkg;
+const { Schema, model, Types } = pkg;
 
 const schema = new Schema({
   tags: [{ type: String }],
   idBloker: { type: String },
-  idBoard: { type: String },
+  idSpace: { type: Types.ObjectId, ref: 'project' },
   idIssue: { type: String, require: true },
   start: { type: Date, require: true },
   end: { type: Date },

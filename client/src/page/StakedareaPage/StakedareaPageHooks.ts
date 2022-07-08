@@ -30,10 +30,8 @@ export const useStakedAreaHook = (
       return undefined
     }
     let formatExportDate = formatExportDateMounth
-    debugger
     if (groupBy === "day") {
       formatExportDate = formatExportDateDay
-      alert("2222")
     }
 
     let MaxDate = data[0]?.start || moment()

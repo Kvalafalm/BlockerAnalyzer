@@ -1,58 +1,53 @@
 import moment, { Moment } from "moment"
-import { appActionTypes, dataJsonRow } from "./interface"
+import { dataActionTypes, dataFiltredRow } from "./interface"
 
-export const appActions = {
+export const dataActions = {
   setData: (payload: any) => {
-    type: appActionTypes.SET_DATA, payload
+    type: dataActionTypes.SET_DATA, payload
   },
   setSwithcFilter: (payload: any) => ({
-    type: appActionTypes.SWITCH_FILTER,
+    type: dataActionTypes.SWITCH_FILTER,
     payload,
   }),
-  setPage: (payload: any) => ({ type: appActionTypes.SET_PAGE, payload }),
-  setTags: (payload: any) => ({ type: appActionTypes.SET_TAGS, payload }),
+  setPage: (payload: any) => ({ type: dataActionTypes.SET_PAGE, payload }),
+  setTags: (payload: any) => ({ type: dataActionTypes.SET_TAGS, payload }),
   setPriorites: (payload: any) => ({
-    type: appActionTypes.SET_PRIORITES,
+    type: dataActionTypes.SET_PRIORITES,
     payload,
   }),
   setTypesTask: (payload: any) => ({
-    type: appActionTypes.SET_TYPESTASK,
+    type: dataActionTypes.SET_TYPESTASK,
     payload,
   }),
   setProjects: (payload: any) => ({
-    type: appActionTypes.SET_PROJECTS,
+    type: dataActionTypes.SET_PROJECTS,
     payload,
   }),
   setStatuses: (payload: any) => ({
-    type: appActionTypes.SET_STATUSES,
+    type: dataActionTypes.SET_STATUSES,
     payload,
   }),
   setTimelineData: (payload: any) => ({
-    type: appActionTypes.SET_TIMELINEDATA,
+    type: dataActionTypes.SET_TIMELINEDATA,
     payload,
   }),
   setTimelineDataStatuses: (payload: any) => ({
-    type: appActionTypes.SET_TIMELINEDATA_STATUSES,
+    type: dataActionTypes.SET_TIMELINEDATA_STATUSES,
     payload,
   }),
   addDataJson: (payload: any) => ({
-    type: appActionTypes.ADD_DATAJSON,
+    type: dataActionTypes.ADD_DATAJSON,
     payload,
   }),
-  pushError: (payload: any) => ({ type: appActionTypes.PUSH_ERROR, payload }),
-  setFilter: (payload: any) => ({ type: appActionTypes.SET_FILTER, payload }),
+  pushError: (payload: any) => ({ type: dataActionTypes.PUSH_ERROR, payload }),
+  setFilter: (payload: any) => ({ type: dataActionTypes.SET_FILTER, payload }),
+  clearFilter: () => ({ type: dataActionTypes.CLEAR_FILTER }),
+  clearErrors: () => ({ type: dataActionTypes.CLEAR_ERRORS }),
 
-  updateSpaces: (payload: any) => ({ type: appActionTypes.SET_SPACES, payload }),
+  clearDataJson: () => ({ type: dataActionTypes.CLEAR_DATAJSON }),
+  cleanReducer: () => ({ type: dataActionTypes.CLEAN }),
 
-  setCurrentSpace: (payload: any) => ({ type: appActionTypes.SET_CURRENTSPACE, payload }),
-
-  clearFilter: () => ({ type: appActionTypes.CLEAR_FILTER }),
-  clearErrors: () => ({ type: appActionTypes.CLEAR_ERRORS }),
-
-  clearDataJson: () => ({ type: appActionTypes.CLEAR_DATAJSON }),
-  cleanReducer: () => ({ type: appActionTypes.CLEAN }),
-
-  updateDataJson: (data: Array<dataJsonRow>) => async (dispatch: any) => {
+  updateDataJson: (data: Array<dataFiltredRow>) => async (dispatch: any) => {
     const newArrayOfTags: Array<string> = []
     const newProjects: Array<string> = []
     const newTypesTask: Array<string> = []
@@ -67,9 +62,9 @@ export const appActions = {
       element.time = calculateDifference(element.start, element.end)
     }
 
-    dispatch(appActions.addDataJson(data))
+    dispatch(dataActions.addDataJson(data))
 
-    data.forEach((element: dataJsonRow) => {
+    data.forEach((element: dataFiltredRow) => {
       if (element.tags.length > 0) {
         tagsAll = tagsAll.concat(element.tags)
       }
@@ -84,14 +79,14 @@ export const appActions = {
         newArrayOfTags.push(str)
       }
     }
-    dispatch(appActions.setTags(newArrayOfTags))
+    dispatch(dataActions.setTags(newArrayOfTags))
 
     for (let str of statuses) {
       if (!newStatuses.includes(str)) {
         newStatuses.push(str)
       }
     }
-    dispatch(appActions.setStatuses(newStatuses))
+    dispatch(dataActions.setStatuses(newStatuses))
 
     for (let str of typesTask) {
       if (!newTypesTask.includes(str)) {
@@ -99,21 +94,21 @@ export const appActions = {
       }
     }
 
-    dispatch(appActions.setTypesTask(newTypesTask))
+    dispatch(dataActions.setTypesTask(newTypesTask))
 
     for (let str of projects) {
       if (!newProjects.includes(str)) {
         newProjects.push(str)
       }
     }
-    dispatch(appActions.setProjects(newProjects))
+    dispatch(dataActions.setProjects(newProjects))
 
     for (let str of arrayOfPriorites) {
       if (!priorites.includes(str)) {
         priorites.push(str)
       }
     }
-    dispatch(appActions.setPriorites(priorites))
+    dispatch(dataActions.setPriorites(priorites))
   },
   getInfoForTimeLine: (data: string, row: any) => async (dispatch: any) => {
     const rowsString = `&subtasks=${row.subtasks}&blockers=${row.blockers}&worklogs=${row.worklogs}`
@@ -131,21 +126,18 @@ export const appActions = {
       const response = await fetch(requestUrl, options)
       const { result } = await response.json()
       const statuses = prepareStatuses(result.statusLog)
-      dispatch(appActions.setTimelineData(result.timelinedata))
-      dispatch(appActions.setTimelineDataStatuses(statuses))
+      dispatch(dataActions.setTimelineData(result.timelinedata))
+      dispatch(dataActions.setTimelineDataStatuses(statuses))
     } catch (error) {
       console.log(error)
     }
   },
-
-  setCurrentSpaceAndUpdateData: (id: string) => async (dispatch: any) => {
-    dispatch(appActions.downloadBlockerListBySpace(id));
-    dispatch(appActions.setCurrentSpace(id))
-  },
-  downloadSpaces: () => async (dispatch: any) => {
-    const RequestUrl = `api/v1/project/list/`
+  downloadDataFromServer: () => async (dispatch: any) => {
+    const firstrequestUrl = `api/v1/blocker/list/`
+    const secondRequestUrl = `api/v1/projects/list/`
     const headers = {
       "Content-Type": "application/json",
+      /* Authorization: `Basic ${config.get('base64')}`, */
     }
 
     const options = {
@@ -154,34 +146,11 @@ export const appActions = {
     }
 
     try {
-      const Response = await fetch(RequestUrl, options)
-      const { result }: any = await Response.json()
-      dispatch(appActions.updateSpaces(result))
-
-    } catch (error) {
-      console.log(error)
-    }
-  },
-
-  downloadStartingDataFromServer: () => async (dispatch: any) => {
-    dispatch(appActions.downloadSpaces())
-  },
-
-  downloadBlockerListBySpace: (id: string) => async (dispatch: any) => {
-
-    const firstrequestUrl = `api/v1/blocker/list/` + id
-    const headers = {
-      "Content-Type": "application/json",
-    }
-
-    const options = {
-      method: "GET",
-      headers: headers,
-    }
-
-    try {
-      const Response = await fetch(firstrequestUrl, options)
-      const dataBlokers: any = await Response.json()
+      const firstResponse = await fetch(firstrequestUrl, options)
+      const secondResponse = await fetch(secondRequestUrl, options)
+      const dataProjectList: any = await secondResponse.json()
+      alert(dataProjectList)
+      const dataBlokers: any = await firstResponse.json()
       const dataJson: any = await Object.values(dataBlokers.result)
 
       for (const element of dataJson) {
@@ -198,7 +167,7 @@ export const appActions = {
         element.time = calculateDifference(element.start, element.end)
       }
 
-      dispatch(appActions.updateDataJson(dataJson))
+      dispatch(dataActions.updateDataJson(dataJson))
     } catch (error) {
       console.log(error)
     }
@@ -208,7 +177,6 @@ export const appActions = {
 const prepareStatuses = (payload: any) => {
   const statuses = []
   let id = 0
-
   for (const iterator of payload) {
     const end = iterator.end ? moment(iterator.end) : moment()
     const start = moment(iterator.start)
