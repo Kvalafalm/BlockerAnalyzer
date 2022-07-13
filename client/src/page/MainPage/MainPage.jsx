@@ -7,6 +7,7 @@ import {
   HistogramPage,
   StakedareaPage,
   EditData,
+  ImportPage,
   TimeLinePage,
   InstructionsPage,
 } from "../index"
@@ -85,7 +86,7 @@ export const MainPage = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   //const { page } = useSelector(state => state.appReducer)
- 
+
   const [open, setOpen] = useState(true)
   const [showFilter, setShowFilter] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
@@ -126,24 +127,24 @@ export const MainPage = () => {
             Sidebar
           </Button>
           <ProjectSelect />
-          
+
           <Typography variant="h6" noWrap component="div">
             Blockers analyzer
           </Typography>
-          <IconButton onClick={handleShowCloseSettings }>
-            <SettingsIcon   />
+          <IconButton onClick={handleShowCloseSettings}>
+            <SettingsIcon />
           </IconButton>
           <IconButton onClick={() => {
-                history.push("/instruction")
-              }}>
+            history.push("/instruction")
+          }}>
             <Help
-              
-              
+
+
             />
           </IconButton>
-         
+
         </Toolbar>
-        
+
       </AppBar>
 
       <Drawer
@@ -164,6 +165,15 @@ export const MainPage = () => {
         </DrawerHeader>
         <Divider />
         <List>
+          <ListItem
+            button
+            key={"Import"}
+            onClick={() => {
+              history.push("/Import")
+            }}
+          >
+            <ListItemText primary={"Import"} />
+          </ListItem>
           <ListItem
             button
             key={"EditData"}
@@ -229,7 +239,10 @@ export const MainPage = () => {
         <DrawerHeader />
         <SwitchR>
           <Route exact={true} path="/">
-            
+            <ImportPage />
+          </Route>
+          <Route exact={true} path="/Import">
+            <ImportPage />
           </Route>
           <Route exact={true} path="/Histogramm">
             <HistogramPage />

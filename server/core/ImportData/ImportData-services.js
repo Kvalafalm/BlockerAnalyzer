@@ -29,7 +29,7 @@ class importDataServices {
       EndDate: moment(EndDate),
       choiceByUpdateDate,
     };
-    const { _id } = await spaceServices.getProjectByExternalId(idboard);
+    const { _id } = await spaceServices.getSpaceByExternalId(idboard);
     if (!_id) {
       return null
     }
