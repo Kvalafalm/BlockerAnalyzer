@@ -1,6 +1,6 @@
 import moment from "moment"
 import { useMemo } from "react"
-import { dataRow } from "../../store/app/interface"
+import { dataRow } from "../../store/data/interface"
 
 export type groupByType = "day" | "mounth"
 

@@ -1,5 +1,5 @@
 import moment, { Moment } from "moment"
-import { dataActionTypes, dataFiltredRow } from "./interface"
+import { dataActionTypes, dataRow } from "./interface"
 
 export const dataActions = {
   setData: (payload: any) => {
@@ -9,7 +9,7 @@ export const dataActions = {
     type: dataActionTypes.SWITCH_FILTER,
     payload,
   }),
-  setPage: (payload: any) => ({ type: dataActionTypes.SET_PAGE, payload }),
+
   setTags: (payload: any) => ({ type: dataActionTypes.SET_TAGS, payload }),
   setPriorites: (payload: any) => ({
     type: dataActionTypes.SET_PRIORITES,
@@ -36,18 +36,15 @@ export const dataActions = {
     payload,
   }),
   addDataJson: (payload: any) => ({
-    type: dataActionTypes.ADD_DATAJSON,
+    type: dataActionTypes.SET_DATAFILTRED,
     payload,
   }),
-  pushError: (payload: any) => ({ type: dataActionTypes.PUSH_ERROR, payload }),
   setFilter: (payload: any) => ({ type: dataActionTypes.SET_FILTER, payload }),
   clearFilter: () => ({ type: dataActionTypes.CLEAR_FILTER }),
-  clearErrors: () => ({ type: dataActionTypes.CLEAR_ERRORS }),
-
   clearDataJson: () => ({ type: dataActionTypes.CLEAR_DATAJSON }),
   cleanReducer: () => ({ type: dataActionTypes.CLEAN }),
 
-  updateDataJson: (data: Array<dataFiltredRow>) => async (dispatch: any) => {
+  updateDataJson: (data: Array<dataRow>) => async (dispatch: any) => {
     const newArrayOfTags: Array<string> = []
     const newProjects: Array<string> = []
     const newTypesTask: Array<string> = []
@@ -64,7 +61,7 @@ export const dataActions = {
 
     dispatch(dataActions.addDataJson(data))
 
-    data.forEach((element: dataFiltredRow) => {
+    data.forEach((element: dataRow) => {
       if (element.tags.length > 0) {
         tagsAll = tagsAll.concat(element.tags)
       }
@@ -132,12 +129,11 @@ export const dataActions = {
       console.log(error)
     }
   },
-  downloadDataFromServer: () => async (dispatch: any) => {
-    const firstrequestUrl = `api/v1/blocker/list/`
-    const secondRequestUrl = `api/v1/projects/list/`
+  downloadBlockerListBySpace: (id: string) => async (dispatch: any) => {
+
+    const firstrequestUrl = `api/v1/blocker/list/` + id
     const headers = {
       "Content-Type": "application/json",
-      /* Authorization: `Basic ${config.get('base64')}`, */
     }
 
     const options = {
@@ -146,11 +142,8 @@ export const dataActions = {
     }
 
     try {
-      const firstResponse = await fetch(firstrequestUrl, options)
-      const secondResponse = await fetch(secondRequestUrl, options)
-      const dataProjectList: any = await secondResponse.json()
-      alert(dataProjectList)
-      const dataBlokers: any = await firstResponse.json()
+      const Response = await fetch(firstrequestUrl, options)
+      const dataBlokers: any = await Response.json()
       const dataJson: any = await Object.values(dataBlokers.result)
 
       for (const element of dataJson) {

@@ -1,4 +1,4 @@
-import { dataRow } from "../../store/app/interface"
+import { dataRow } from "../../store/data/interface"
 interface IHistogramPageHook {
   convertDataToHistogrammChartData: Function;
 }

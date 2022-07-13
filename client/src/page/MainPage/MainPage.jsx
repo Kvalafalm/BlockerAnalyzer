@@ -4,7 +4,6 @@ import { Route, Switch as SwitchR } from "react-router"
 import { useHistory } from "react-router-dom"
 import {
   BublecharPage,
-  Import,
   HistogramPage,
   StakedareaPage,
   EditData,
@@ -167,15 +166,6 @@ export const MainPage = () => {
         <List>
           <ListItem
             button
-            key={"Import"}
-            onClick={() => {
-              history.push("/Import")
-            }}
-          >
-            <ListItemText primary={"Import"} />
-          </ListItem>
-          <ListItem
-            button
             key={"EditData"}
             onClick={() => {
               history.push("/EditData")
@@ -227,7 +217,7 @@ export const MainPage = () => {
             <Typography>Off</Typography>
             <Switch
               {...label}
-              defaultChecked={showFilter}
+              checked={showFilter}
               onChange={handleChangeSwitch}
             />
             <Typography>On</Typography>
@@ -239,10 +229,7 @@ export const MainPage = () => {
         <DrawerHeader />
         <SwitchR>
           <Route exact={true} path="/">
-            <Import />
-          </Route>
-          <Route exact={true} path="/Import">
-            <Import />
+            
           </Route>
           <Route exact={true} path="/Histogramm">
             <HistogramPage />

@@ -1,4 +1,3 @@
-export * from "./Import"
 export * from "./HistogramPage"
 export * from "./BublecharPage"
 export * from "./StakedareaPage"

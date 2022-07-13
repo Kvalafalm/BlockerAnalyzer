@@ -2,9 +2,9 @@ import moment from "moment"
 import {
   actionPayload,
   dataActionTypes,
-  dataFiltredRow,
   dataRow,
   filter,
+  iDataReducerState,
 } from "./interface"
 
 const initialStateFilter: filter = {
@@ -17,38 +17,39 @@ const initialStateFilter: filter = {
   tags: [],
 }
 
-const initialState = {
-  dataJson: [],
-  dataPure: null,
+const initialState: iDataReducerState = {
+
+  dataFiltred: [],
+  data: [],
   tags: [],
   typesTask: [],
-  page: "/",
-  errors: [],
-  showFilter: false,
   filter: { ...initialStateFilter },
+  priorites: [],
   projects: [],
-  data: [],
+  statuses: [],
   dataTimeline: [],
+  TimeLineStatuses: [],
+
 }
 
 export const dataReducer = (state = initialState, action: actionPayload) => {
   switch (action.type) {
     case dataActionTypes.SET_DATA:
-      return { ...state, dataPure: action.payload }
-    case dataActionTypes.ADD_DATAJSON:
-      const dataJson: Array<dataFiltredRow> = state.dataJson.slice()
-      action.payload.forEach((element: dataFiltredRow): void => {
+      return { ...state, data: action.payload }
+    case dataActionTypes.SET_DATAFILTRED:
+      const data: Array<dataRow> = []
+      action.payload.forEach((element: dataRow): void => {
         if (
-          !dataJson.some(
-            (e: dataFiltredRow) =>{
+          !data.some(
+            (e: dataRow) => {
               return e.idBloker === element.idBloker && e.id === element.id
             }
           )
         ) {
-          dataJson.push(element)
+          data.push(element)
         }
       })
-      return { ...state, dataJson, data: FilteringData(dataJson, state.filter) }
+      return { ...state, data, dataFiltred: FilteringData(data, state.filter) }
     case dataActionTypes.SET_TAGS:
       return { ...state, tags: action.payload }
     case dataActionTypes.SET_STATUSES:
@@ -59,25 +60,15 @@ export const dataReducer = (state = initialState, action: actionPayload) => {
       return { ...state, typesTask: action.payload }
     case dataActionTypes.SET_PROJECTS:
       return { ...state, projects: action.payload }
-    case dataActionTypes.SET_PAGE:
-      return { ...state, page: action.payload }
-    case dataActionTypes.PUSH_ERROR:
-      const errors: Array<any> = state.errors.slice()
-      errors.push(action.payload)
-      return { ...state, errors }
-    case dataActionTypes.CLEAR_ERRORS:
-      return { ...state, errors: [] }
     case dataActionTypes.SET_TIMELINEDATA:
       return { ...state, dataTimeline: action.payload }
-    case dataActionTypes.SWITCH_FILTER:
-      return { ...state, showFilter: action.payload }
     case dataActionTypes.CLEAR_DATAJSON:
-      return { ...state, dataJson: [], dataPure: null }
+      return { ...state, dataFiltred: [], data: [] }
     case dataActionTypes.SET_FILTER:
       return {
         ...state,
         filter: action.payload,
-        data: FilteringData(state.dataJson, action.payload),
+        dataFiltred: FilteringData(state.data, action.payload),
       }
     case dataActionTypes.SET_TIMELINEDATA_STATUSES:
       return {
@@ -88,7 +79,7 @@ export const dataReducer = (state = initialState, action: actionPayload) => {
       return {
         ...state,
         filter: { ...initialStateFilter },
-        data: state.dataJson.slice(),
+        dataFiltred: state.data.slice(),
       }
     case dataActionTypes.CLEAN:
       return { ...initialState }

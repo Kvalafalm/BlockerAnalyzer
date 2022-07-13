@@ -1,4 +1,4 @@
-import { appActions } from "../../store/app"
+import { dataActions } from "../../store/data"
 import { useDispatch } from "react-redux"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { IconButton, Tooltip } from "@mui/material"
@@ -8,8 +8,8 @@ export const useEditDataHook = () => {
   const dispatch = useDispatch()
   const handeOnClickDelete = id => {
     const newArray = dataJson.filter(element => element.id !== id)
-    dispatch(appActions.clearDataJson())
-    dispatch(appActions.updateDataJson(newArray))
+    dispatch(dataActions.clearDataJson())
+    dispatch(dataActions.updateDataJson(newArray))
   }
 
   const handeOnClickOpenComments = params => {
@@ -155,7 +155,7 @@ export const useEditDataHook = () => {
       dataJson[objIndex][event.field] = event.value
     }
     const newArray = dataJson.slice()
-    dispatch(appActions.updateDataJson(newArray))
+    dispatch(dataActions.updateDataJson(newArray))
   }
 
   const handleClickSave = () => {}

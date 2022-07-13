@@ -12,5 +12,3 @@ export type RootState = {
   appReducer: iAppReducerState,
   dataReducer: iDataReducerState,
 }
-
-export type RootState2 = ReturnType<typeof reducers>

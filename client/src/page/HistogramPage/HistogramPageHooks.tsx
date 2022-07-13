@@ -1,4 +1,4 @@
-import { dataRow } from "../../store/app/interface"
+import { dataRow } from "../../store/data/interface"
 interface IHistogramPageHook {
   convertDataToHistogrammChartData: Function;
 }
@@ -8,7 +8,6 @@ interface IHistogrammChartDataRow {
 }
 
 export const useHistogramPageHooks = (
-  data: Array<dataRow>
 ): IHistogramPageHook => {
   const convertDataToHistogrammChartData = (
     data: Array<dataRow>
@@ -72,6 +71,11 @@ export const useHistogramPageHooks = (
     rows.sort((a, b) => {
       return parseInt(a.day) - parseInt(b.day)
     })
+
+    if (rows.length === 1) {
+      return []
+    }
+    
     return rows
   }
 
@@ -89,9 +93,8 @@ export const useHistogramPageHooks = (
     }
     row[tag] += `
     <span>
-      <a href="${data.linkIssue}?focusedCommentId=${data.idBloker}#comment-${
-      data.idBloker
-    }" target="_blank" >
+      <a href="${data.linkIssue}?focusedCommentId=${data.idBloker}#comment-${data.idBloker
+      }" target="_blank" >
         ${data.idIssue}
       </a>
       ${data.reason.substring(0, 50)} ...

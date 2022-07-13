@@ -3,19 +3,19 @@ import { useSelector } from "react-redux"
 import { Checkbox, FormControlLabel } from "@mui/material"
 import { useState } from "react"
 import { groupByType, useStakedAreaHook } from "./StakedareaPageHooks"
-import { iAppReducerState } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
+import { iDataReducerState } from "../../store/data/interface"
 
 export const StakedareaPage = () => {
-  const { data, tags } = useSelector(
-    (state: RootState): iAppReducerState => state.appReducer
+  const { dataFiltred, tags } = useSelector(
+    (state: RootState): iDataReducerState => state.dataReducer
   )
   const [stackedChart, setStackedChart] = useState(true)
   const groupByTypeFirstRender: groupByType = "mounth"
   const [groupByData, setGroupByData] = useState<groupByType>(groupByTypeFirstRender)
-  const { dataChart } = useStakedAreaHook(data, groupByData)
+  const { dataChart } = useStakedAreaHook(dataFiltred, groupByData)
 
-  if (data.length === 0) {
+  if (dataFiltred.length === 0) {
     return <div>No data</div>
   }
 

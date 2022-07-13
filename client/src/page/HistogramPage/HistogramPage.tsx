@@ -1,23 +1,38 @@
 import { Histogram } from "../../components"
 import { useSelector } from "react-redux"
-import { iAppReducerState } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
 import { useHistogramPageHooks } from "./HistogramPageHooks"
+import { dataRow, iDataReducerState } from "../../store/data/interface"
 import { useMemo } from "react"
 
 export const HistogramPage = () => {
-  const { data, tags } = useSelector(
-    (state: RootState): iAppReducerState => state.appReducer
+  const dataFiltred = useSelector(
+    (state: RootState): Array<dataRow> => state.dataReducer.dataFiltred
   )
-  const { convertDataToHistogrammChartData } = useHistogramPageHooks(data)
-  const dataForHC = convertDataToHistogrammChartData(data)
-/*   const dataForHC = useMemo(() => {
-    convertDataToHistogrammChartData(data)
-    console.log("convertDataToHistogrammChartData")
-  }, [data]) */
+
+  const tags = useSelector(
+    (state: RootState): Array<string> => state.dataReducer.tags
+  )
+
+  const { convertDataToHistogrammChartData } = useHistogramPageHooks()
+  const dataForHC = convertDataToHistogrammChartData(dataFiltred)
+  /*   const dataForHC = useMemo(() => {
+      convertDataToHistogrammChartData(dataFiltred)
+      console.log("calculate dataForHC")
+    }, [dataFiltred]) */
+
+  if (!dataFiltred && tags.length === 0) {
+    return (
+      <div>
+        нет данных
+      </div>
+    )
+  }
   return (
     <div>
-      <Histogram dataJSON={dataForHC} seriesChart={tags} />
+      <Histogram
+        data={dataForHC}
+        seriesChart={tags} />
     </div>
   )
 }

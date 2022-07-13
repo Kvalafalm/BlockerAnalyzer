@@ -16,18 +16,15 @@ import { iAppReducerState } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
 
 export const EditData = () => {
-  const { dataJson } = useSelector(state => state.appReducer)
-  const dataEditGrid = dataJson
+  const dataFiltred = useSelector(state => state.dataReducer.dataFiltred)
 
   const apiRef = useGridApiRef()
   const { columns, editEnd, handleClickSave } = useEditDataHook()
 
   return (
-    <React.Fragment>
-      {
         <DataGrid
           apiRef={apiRef}
-          rows={dataEditGrid ? dataEditGrid : []}
+          rows={dataFiltred ? dataFiltred : []}
           columns={columns}
           autoHeight={true}
           components={{ Toolbar: CustomToolbar }}
@@ -37,8 +34,6 @@ export const EditData = () => {
           disableSelectionOnClick={true}
           onCellEditCommit={editEnd}
         />
-      }
-    </React.Fragment>
   )
 }
 

@@ -4,8 +4,8 @@
   "mongoUri": "mongodb+srv://testuser:1234qwer@cluster0.gs8g3.mongodb.net/myFirstDatabase",
   "baseUrl": "http://localhost:5000",
   "jira": "jira.lcgs.ru",
-  "jiraUser": "Kutnyashenko.NV",
+  "jiraUser": "User",
   "protocol": "https",
-  "jiraPassword": "18%IOcy%cO@X",
+  "jiraPassword": "",
   "base64": "S3V0bnlhc2hlbmtvLk5WOjE4JUlPY3klY09AWA=="
 }

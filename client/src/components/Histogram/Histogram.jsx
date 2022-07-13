@@ -1,7 +1,7 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 am4core.useTheme(am4themes_animated);
 
@@ -86,9 +86,9 @@ export const Histogram = (props) => {
     }, [props, state.initialize, state.chart])
 
     if (state?.chart) {
-        state.chart.data = props.dataJSON
+        state.chart.data = props.data
     }
-
+    
     return (
         <div id="chartdiv" style={{ width: "100%", height: "800px" }}>
 

@@ -13,7 +13,7 @@ import DateAdapter from "@mui/lab/AdapterMoment"
 import { useDispatch, useSelector } from "react-redux"
 import { styled } from "@mui/material/styles"
 import Stack from "@mui/material/Stack"
-import { appActions } from "../../store/app"
+import { dataActions } from "../../store/data"
 import moment, { Moment } from "moment"
 import { iAppReducerState } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
@@ -27,10 +27,10 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }))
 export const FiltredBox = (props: any) => {
-  const { tags, typesTask, projects, priorites, statuses } =
+/*   const { tags, typesTask, projects, priorites, statuses } =
     useSelector((state: RootState): iAppReducerState => state.appReducer)
-
-  const { filter } =
+ */
+  const { tags, typesTask, projects, priorites, statuses, filter } =
     useSelector((state: RootState): iDataReducerState => state.dataReducer)
 
   const valueStart: RangeInput<Moment> = [filter.start, filter.end]
@@ -64,10 +64,10 @@ export const FiltredBox = (props: any) => {
       statuses: statusesCheck ?? null
     }
 
-    dispatch(appActions.setFilter(filterData))
+    dispatch(dataActions.setFilter(filterData))
   }
   const clearFilter = () => {
-    dispatch(appActions.clearFilter())
+    dispatch(dataActions.clearFilter())
   }
   const handleChangeTags = (event: any) => {
     const value = []

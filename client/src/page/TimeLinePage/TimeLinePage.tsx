@@ -1,6 +1,5 @@
 import { TextField } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { iAppReducerState } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
 import Box from "@mui/material/Box"
 import FormLabel from "@mui/material/FormLabel"
@@ -11,8 +10,9 @@ import FormHelperText from "@mui/material/FormHelperText"
 import Checkbox from "@mui/material/Checkbox"
 import { useEffect, useState } from "react"
 import { TimeLine, TimeLineTable } from "../../components"
-import { appActions } from "../../store/app"
 import { Moment } from "moment"
+import { dataActions } from "../../store/data"
+import { iDataReducerState } from "../../store/data/interface"
 const prepareTimeLineStatuses = (TimeLineStatuses: any, blokerData: any) => {
   return TimeLineStatuses
 }
@@ -34,7 +34,7 @@ type blokerData = Array<rowBlocker>
 export const TimeLinePage = () => {
   const dispatch = useDispatch()
   const { dataTimeline, TimeLineStatuses } = useSelector(
-    (state: RootState): iAppReducerState => state.appReducer
+    (state: RootState): iDataReducerState => state.dataReducer
   )
 
   const [data, setData] = useState(dataTimeline)
@@ -73,7 +73,7 @@ export const TimeLinePage = () => {
   }
 
   useEffect(() => {
-    dispatch(appActions.getInfoForTimeLine(id, rows))
+    dispatch(dataActions.getInfoForTimeLine(id, rows))
   }, [id, rows])
 
   return (
