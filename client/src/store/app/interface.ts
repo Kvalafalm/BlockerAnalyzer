@@ -28,6 +28,7 @@ export const appActionTypes = {
 export interface Space {
   id: string,
   name: string,
+  externalId?: string
 }
 
 export interface actionPayload {

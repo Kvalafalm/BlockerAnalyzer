@@ -35,6 +35,13 @@ export const dataActions = {
     type: dataActionTypes.SET_TIMELINEDATA_STATUSES,
     payload,
   }),
+
+  setExternalSpaceLists: (payload: any) => ({
+    type: dataActionTypes.SET_EXTERNALSPACELIST,
+    payload,
+  }),
+
+
   addDataJson: (payload: any) => ({
     type: dataActionTypes.SET_DATAFILTRED,
     payload,
@@ -165,6 +172,28 @@ export const dataActions = {
       console.log(error)
     }
   },
+
+  downloadSpacesList: () => async (dispatch: any) => {
+
+    const firstrequestUrl = `api/v1/importdata/project/list`
+    const headers = {
+      "Content-Type": "application/json",
+    }
+
+    const options = {
+      method: "GET",
+      headers: headers,
+    }
+
+    try {
+      const Response = await fetch(firstrequestUrl, options)
+      const list: any = await Response.json()
+      dispatch(dataActions.setExternalSpaceLists(list.result))
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
 }
 
 const prepareStatuses = (payload: any) => {

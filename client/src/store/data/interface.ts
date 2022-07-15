@@ -1,4 +1,5 @@
 import { Moment } from "moment";
+import { Space } from "../app/interface";
 
 type BAdate = Moment | null
 
@@ -16,12 +17,14 @@ export const dataActionTypes = {
   SET_STATUSES: "DATA.SET_STATUSES",
   SET_TYPESTASK: "DATA.SET_TYPESTASK",
   SET_PROJECTS: "DATA.SET_PROJECTS",
-  
+  SET_EXTERNALSPACELIST: "DATA.SET_EXTERNAL_SPACE_LIST",
+
+
   SWITCH_FILTER: "DATA.SWITCH_FILTER",
-  
+
   SET_FILTER: "DATA.SET_FILTER",
   CLEAR_FILTER: "DATA.CLEAR_FILTER",
-  
+
 } as const
 
 export interface actionPayload {
@@ -39,8 +42,9 @@ export interface iDataReducerState {
   priorites: Array<string>;
   projects: Array<string>;
   statuses: Array<string>;
-  dataTimeline:Array<any>;
+  dataTimeline: Array<any>;
   TimeLineStatuses: Array<any>
+  externalProjects?: Array<Space>
 }
 
 export interface dataRow {

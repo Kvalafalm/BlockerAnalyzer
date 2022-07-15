@@ -11,6 +11,7 @@ import {
 import moment from 'moment';
 import ApiError from '../../utils/exceptions/api_error';
 import spaceServices from '../space/space-services';
+import spacesView from '../space/space-view';
 
 class importDataServices {
   async ImportIssuesFromKanbanBoard(
@@ -148,10 +149,11 @@ class importDataServices {
 
   async getProjects() {
     const projects = await externalConnectionsService.getProjectList();
-    if (projects.length === 0) {
+    const data = await spacesView.prepareArrayOfSpaces(projects)
+    if (data.length === 0) {
       return false;
     }
-    return projects;
+    return data;
   }
 
   async importProject(projectId) {

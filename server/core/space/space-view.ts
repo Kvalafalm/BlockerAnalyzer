@@ -21,19 +21,29 @@ export class Space {
   id: string;
   name: string;
   statuses?: Array<statuses>;
+  externalId?: string
 
   constructor(data) {
     this.id = data._id;
     this.name = data.name;
+    this.externalId = data.id;
   }
 
-  exportForList(): any {
-    const newObject = {
+  exportForList(): spaceList {
+    const newObject: spaceList = {
       id: '',
       name: '',
     }
     newObject.id = this.id;
+    newObject.externalId = this.externalId;
     newObject.name = this.name;
     return newObject
   }
+}
+
+type spaceList = {
+  id: string;
+  name: string;
+  statuses?: Array<statuses>;
+  externalId?: string;
 }

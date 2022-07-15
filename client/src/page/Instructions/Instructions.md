@@ -1,6 +1,4 @@
-import { Box } from "@mui/material"
-
-export const InstructionsPage = () => {
+export const InstructionsPage = `
   return (
     <Box>
       <div>

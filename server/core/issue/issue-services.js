@@ -2,7 +2,7 @@ import externalConnectionsService from '../externalConnections/externalConnectio
 import { getArrayOfStatus } from '../ImportData/ImportData-library.js';
 import moment from 'moment';
 import BlockerServices from '../bloker/Blocker-services.js';
-import { getColorByStatus } from '../../../library/library.js';
+import { getColorByStatus } from '../../../library/library';
 const formatExportDate = 'YYYY-MM-DD HH';
 
 class issueServices {

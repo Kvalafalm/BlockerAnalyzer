@@ -4,8 +4,6 @@ import { appActions } from "../../store/app"
 import { Space } from "../../store/app/interface"
 import { RootState } from "../../store/reducers"
 
-var counter = 0;
-
 export const ProjectSelect = () => {
   const dispatch = useDispatch();
   const spaces = useSelector(

@@ -13,6 +13,7 @@ import {
 import { useState } from "react"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
+import { ProjectAdd } from "../ProjectAdd"
 
 export const Settings = props => {
   const [jiraDataAuth, setJiraDataAuth] = useState({
@@ -108,6 +109,7 @@ export const Settings = props => {
           </RadioGroup>
 
           <Divider />
+          <ProjectAdd />
           <Button onClick={testConnection}>TestConnection</Button>
           <Button onClick={props.onClose}>Save</Button>
           <Button onClick={props.onClose}>Close</Button>

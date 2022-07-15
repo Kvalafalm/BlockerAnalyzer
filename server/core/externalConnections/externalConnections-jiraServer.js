@@ -152,8 +152,8 @@ class jiraConnections {
     }
   }
 
-  async getProjectList(id) {
-    const requestUrl = `https://${config.get('jira')}/rest/agile/1.0/board`;
+  async getProjectList(startAt = 0) {
+    const requestUrl = `https://${config.get('jira')}/rest/agile/1.0/board?startAt=${startAt}`;
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Basic ${authToken}`,
@@ -169,7 +169,17 @@ class jiraConnections {
       if (response.status === 404) {
         throw ApiError.BadRequest('Error request to Jira', error);
       }
-      const { values } = await response.json();
+      const data = await response.json();
+      let values = data.values
+
+      if (!data.isLast) {
+        const startAtNext = startAt + 50;
+        const newData = await this.getProjectList(startAtNext);
+        if (newData.length > 0) {
+          values = await values.concat(newData)
+        }
+      }
+      
       return values;
     } catch (error) {
       throw ApiError.BadRequest('Error request to Jira', error);

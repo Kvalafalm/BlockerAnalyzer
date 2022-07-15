@@ -54,6 +54,8 @@ export const dataReducer = (state = initialState, action: actionPayload) => {
       return { ...state, tags: action.payload }
     case dataActionTypes.SET_STATUSES:
       return { ...state, statuses: action.payload }
+      case dataActionTypes.SET_EXTERNALSPACELIST:
+        return { ...state, externalProjects: action.payload }
     case dataActionTypes.SET_PRIORITES:
       return { ...state, priorites: action.payload }
     case dataActionTypes.SET_TYPESTASK:

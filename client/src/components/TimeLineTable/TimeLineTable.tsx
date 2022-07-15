@@ -1,6 +1,6 @@
 import "./style.css"
 
-export const TimeLineTable = props => {
+export const TimeLineTable = (props: any) => {
   return (
     <div className="Table">
       <div>Данные</div>
@@ -10,7 +10,7 @@ export const TimeLineTable = props => {
         <div className="item">End</div>
         <div className="item">Time</div>
         {props.statuses &&
-          props.statuses.map(element => {
+          props.statuses.map((element: any) => {
             const className = `item ${element.color}`
 
             return (
