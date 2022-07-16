@@ -9,7 +9,6 @@ const initialState: iAppReducerState = {
   errors: [],
   showFilter: false,
   spaces: [],
-  currentSpaceId: '',
 }
 
 export const appReducer = (state = initialState, action: actionPayload) => {
@@ -23,7 +22,7 @@ export const appReducer = (state = initialState, action: actionPayload) => {
     case appActionTypes.SET_SPACES:
       return { ...state, spaces: action.payload }
     case appActionTypes.SET_CURRENTSPACE:
-      return { ...state, currentSpaceId: action.payload }
+      return { ...state, currentSpace: action.payload }
     case appActionTypes.CLEAN:
       return { ...initialState }
     default:

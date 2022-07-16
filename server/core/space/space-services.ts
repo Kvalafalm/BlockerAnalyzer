@@ -38,6 +38,21 @@ class spaceServices {
     return true;
   }
 
+  async UpdateLastRequest(
+    externalId: string,
+    request: any
+  ): Promise<boolean> {
+
+    const SpaceUpdated = await spaceModel.findOneAndUpdate(
+      { externalId: externalId },
+      {
+        lastRequest: request
+      }
+    );
+
+    return true;
+  }
+
   async getStatusList(projectId: string): Promise<any> {
     const { statuses } = await spaceModel.findOne({ projectId }) as Space;
     return statuses;

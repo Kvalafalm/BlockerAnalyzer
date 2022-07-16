@@ -1,18 +1,19 @@
+import moment from "moment";
 import { dataActions } from "../data";
-import { appActionTypes } from "./interface"
+import { appActionTypes, IUpdateRequest, ISpace } from "./interface"
 
 export const appActions = {
 
   pushError: (payload: any) => ({ type: appActionTypes.PUSH_ERROR, payload }),
-  updateSpaces: (payload: any) => ({ type: appActionTypes.SET_SPACES, payload }),
-  setCurrentSpace: (payload: any) => ({ type: appActionTypes.SET_CURRENTSPACE, payload }),
+  updateSpaces: (payload: Array<ISpace>) => ({ type: appActionTypes.SET_SPACES, payload }),
+  setCurrentSpace: (payload: ISpace) => ({ type: appActionTypes.SET_CURRENTSPACE, payload }),
   clearErrors: () => ({ type: appActionTypes.CLEAR_ERRORS }),
   cleanReducer: () => ({ type: appActionTypes.CLEAN }),
 
 
-  setCurrentSpaceAndUpdateData: (id: string) => async (dispatch: any) => {
-    dispatch(dataActions.downloadBlockerListBySpace(id));
-    dispatch(appActions.setCurrentSpace(id))
+  setCurrentSpaceAndUpdateData: (space: ISpace) => async (dispatch: any) => {
+    dispatch(dataActions.downloadBlockerListBySpace(space.id));
+    dispatch(appActions.setCurrentSpace(space))
   },
   downloadSpaces: () => async (dispatch: any) => {
     const RequestUrl = `api/v1/space/list/`
@@ -39,40 +40,34 @@ export const appActions = {
     dispatch(appActions.downloadSpaces())
   },
 
-  /* downloadBlockerListBySpace: (id: string) => async (dispatch: any) => {
+  updateImportBLockers: (space: ISpace) => async (dispatch: any) => {
 
-    const firstrequestUrl = `api/v1/blocker/list/` + id
+    const firstrequestUrl = `api/v1/ImportData/periodAsync`
     const headers = {
       "Content-Type": "application/json",
     }
+    if (!space.lastRequest?.EndDate) {
+      return false
+    }
 
-    const options = {
-      method: "GET",
+    const body: IUpdateRequest = {
+      idboard: space.externalId,
+      StartDate: moment(space.lastRequest?.EndDate).format("YYYY-MM-DD") ?? '1990-00-00',
+      EndDate: moment().format("YYYY-MM-DD"),
+      choiceByUpdateDate: true
+    }
+
+    const options: RequestInit = {
+      method: "POST",
       headers: headers,
+      body: JSON.stringify(body)
     }
 
     try {
       const Response = await fetch(firstrequestUrl, options)
       const dataBlokers: any = await Response.json()
-      const dataJson: any = await Object.values(dataBlokers.result)
-
-      for (const element of dataJson) {
-        if (element.tags) {
-          element.tags = Object.values(element.tags)
-        }
-        if (element.start) {
-          element.start = moment(element.start)
-        }
-        if (element.end) {
-          element.end = moment(element.end)
-        }
-
-        element.time = calculateDifference(element.start, element.end)
-      }
-
-      dispatch(appActions.updateDataJson(dataJson))
     } catch (error) {
       console.log(error)
     }
-  }, */
+  },
 }

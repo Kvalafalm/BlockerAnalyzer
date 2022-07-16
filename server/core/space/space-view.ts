@@ -21,12 +21,14 @@ export class Space {
   id: string;
   name: string;
   statuses?: Array<statuses>;
-  externalId?: string
+  externalId?: string;
+  lastRequest?: any;
 
   constructor(data) {
     this.id = data._id;
     this.name = data.name;
-    this.externalId = data.id;
+    this.externalId = data.externalId;
+    this.lastRequest = data.lastRequest
   }
 
   exportForList(): spaceList {
@@ -37,6 +39,7 @@ export class Space {
     newObject.id = this.id;
     newObject.externalId = this.externalId;
     newObject.name = this.name;
+    newObject.lastRequest = this.lastRequest;
     return newObject
   }
 }
@@ -46,4 +49,5 @@ type spaceList = {
   name: string;
   statuses?: Array<statuses>;
   externalId?: string;
+  lastRequest?: any;
 }

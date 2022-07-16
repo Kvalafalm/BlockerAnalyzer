@@ -9,6 +9,8 @@ routerImportData.get('/:id', ImportDataController.importDataOne);
 
 routerImportData.post('/period', ImportDataController.importDataPerPeriod);
 
+routerImportData.post('/periodAsync', ImportDataController.importDataPerPeriodAsync);
+
 routerImportData.post('/project/:id', ImportDataController.importProject);
 
 routerImportData.get('/project/list', ImportDataController.getProjects);

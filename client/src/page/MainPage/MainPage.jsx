@@ -21,9 +21,10 @@ import {
   Switch,
   ListItemText,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
+import ReplayIcon from '@mui/icons-material/Replay';
 import IconButton from "@mui/material/IconButton"
 import { useLayoutEffect, useState } from "react"
 import MuiAppBar from "@mui/material/AppBar"
@@ -33,8 +34,7 @@ import Stack from "@mui/material/Stack"
 import { FiltredBox, ProjectSelect, Settings } from "../../components"
 import { Timeline } from "@material-ui/icons"
 import { Help } from "@mui/icons-material"
-import { dataActions } from "../../store/data"
-//import HelpIcon from '@mui/icons-material/Help';
+import moment from "moment"
 const drawerWidth = 130
 
 const AppBar = styled(MuiAppBar, {
@@ -85,7 +85,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export const MainPage = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  //const { page } = useSelector(state => state.appReducer)
+  const space = useSelector(state => state.appReducer?.currentSpace)
 
   const [open, setOpen] = useState(true)
   const [showFilter, setShowFilter] = useState(false)
@@ -103,6 +103,12 @@ export const MainPage = () => {
     setShowSettings(!showSettings)
   }
 
+  const handleUpdateData = () => {
+    if (space) {
+      dispatch(appActions.updateImportBLockers(space))
+    }
+  }
+  const lastUpdate = space?.lastRequest?.EndDate ? `LastUpdate:${moment(space.lastRequest.EndDate).format("DD-MM-YYYY")}` : 'LastUpdate'
   const handleDrawerOpenClose = () => {
     setOpen(!open)
   }
@@ -134,15 +140,16 @@ export const MainPage = () => {
           <IconButton onClick={handleShowCloseSettings}>
             <SettingsIcon />
           </IconButton>
+          <IconButton onClick={handleUpdateData}>
+            <ReplayIcon />
+            
+          </IconButton>
           <IconButton onClick={() => {
             history.push("/instruction")
           }}>
-            <Help
-
-
-            />
+            <Help />
           </IconButton>
-
+          {lastUpdate}
         </Toolbar>
 
       </AppBar>

@@ -1,4 +1,3 @@
-import React from "react"
 import { useSelector } from "react-redux"
 
 import {
@@ -12,8 +11,6 @@ import {
 import SaveIcon from "@mui/icons-material/Save"
 import { IconButton } from "@mui/material"
 import { useEditDataHook } from "./EditDataHooks"
-import { iAppReducerState } from "../../store/app/interface"
-import { RootState } from "../../store/reducers"
 
 export const EditData = () => {
   const dataFiltred = useSelector(state => state.dataReducer.dataFiltred)

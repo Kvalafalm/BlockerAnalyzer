@@ -1,14 +1,14 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Button, Box } from "@mui/material"
 import { useLayoutEffect, useState } from "react"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { Space } from "../../store/app/interface"
+import { ISpace } from "../../store/app/interface"
 import { dataActions } from "../../store/data"
 import { RootState } from "../../store/reducers"
 
 export const ProjectAdd = () => {
   const dispatch = useDispatch();
   const externalProjects = useSelector(
-    (state: RootState): Space[] | undefined => state.dataReducer?.externalProjects, shallowEqual
+    (state: RootState): ISpace[] | undefined => state.dataReducer?.externalProjects, shallowEqual
   )
   const [externalSpaceId, setExternalSpaceId] = useState('');
 
@@ -36,7 +36,7 @@ export const ProjectAdd = () => {
         onChange={handleChange}
         sx={{ minWidth: 300 }}
       >
-        {showBoards && externalProjects.map((element: Space) => {
+        {showBoards && externalProjects.map((element: ISpace) => {
           return <MenuItem value={element.externalId} key={element.externalId}>{element.name}</MenuItem>
         })}
 

@@ -7,9 +7,29 @@ class ImportDataController {
       const { id } = req?.params;
       let result;
       if (id) {
-        result = await ImportDataServices.importIssuesByID([id],"spaceId");
+        result = await ImportDataServices.importIssuesByID([id], "spaceId");
       }
 
+      await res.status(200).json({
+        result: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async importDataPerPeriodAsync(req, res, next) {
+    try {
+      const { idboard, StartDate, EndDate, choiceByUpdateDate } = req.body;
+
+      ImportDataServices.ImportIssuesFromKanbanBoard(
+        idboard,
+        StartDate,
+        EndDate,
+        choiceByUpdateDate
+      );
+
+      const result = { message: "Start import" }
       await res.status(200).json({
         result: result,
       });
@@ -21,13 +41,13 @@ class ImportDataController {
   async importDataPerPeriod(req, res, next) {
     try {
       const { idboard, StartDate, EndDate, choiceByUpdateDate } = req.body;
-
       const result = await ImportDataServices.ImportIssuesFromKanbanBoard(
         idboard,
         StartDate,
         EndDate,
         choiceByUpdateDate
       );
+
       await res.status(200).json({
         result: result,
       });
@@ -35,7 +55,6 @@ class ImportDataController {
       next(e);
     }
   }
-
   async importProjectStatuses(req, res, next) {
     try {
       const { id } = req?.params;

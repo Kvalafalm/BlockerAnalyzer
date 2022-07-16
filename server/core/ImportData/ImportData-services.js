@@ -30,6 +30,7 @@ class importDataServices {
       EndDate: moment(EndDate),
       choiceByUpdateDate,
     };
+    console.log(idboard)
     const { _id } = await spaceServices.getSpaceByExternalId(idboard);
     if (!_id) {
       return null
@@ -37,11 +38,13 @@ class importDataServices {
     const issues = await externalConnectionsService.getIssuesKeyFromKanbanBoard(
       params
     );
+    await spaceServices.UpdateLastRequest(idboard, params)
 
     if (issues.length === 0) {
       return { result: 'empty array' };
     }
     const result = this.importIssuesByID(issues, _id);
+
     return result;
   }
 

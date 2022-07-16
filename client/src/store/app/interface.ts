@@ -24,11 +24,18 @@ export const appActionTypes = {
   SET_CURRENTSPACE: "APP.SET_CURRENTSPACE",
 } as const
 
+export interface IUpdateRequest {
+  idboard: string,
+  StartDate: string,
+  EndDate: string,
+  choiceByUpdateDate: boolean
+}
 
-export interface Space {
+export interface ISpace {
   id: string,
   name: string,
-  externalId?: string
+  externalId: string,
+  lastRequest?: IUpdateRequest
 }
 
 export interface actionPayload {
@@ -40,6 +47,8 @@ export interface iAppReducerState {
   page: string;
   errors: Array<string>;
   showFilter: boolean;
-  spaces: Array<Space>;
-  currentSpaceId: string;
+  spaces: Array<ISpace>;
+  currentSpace?: Spacetype;
 }
+
+export type Spacetype = ISpace | undefined

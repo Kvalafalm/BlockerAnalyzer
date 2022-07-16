@@ -1,5 +1,5 @@
 import { Moment } from "moment";
-import { Space } from "../app/interface";
+import { ISpace } from "../app/interface";
 
 type BAdate = Moment | null
 
@@ -44,7 +44,7 @@ export interface iDataReducerState {
   statuses: Array<string>;
   dataTimeline: Array<any>;
   TimeLineStatuses: Array<any>
-  externalProjects?: Array<Space>
+  externalProjects?: Array<ISpace>
 }
 
 export interface dataRow {
