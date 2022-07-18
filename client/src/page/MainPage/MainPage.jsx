@@ -104,8 +104,16 @@ export const MainPage = () => {
   }
 
   const handleUpdateData = () => {
-    if (space) {
-      dispatch(appActions.updateImportBLockers(space))
+
+    if (space && space.lastRequest) {
+      const params = {
+        idboard: space.externalId,
+        StartDate: moment(space.lastRequest?.EndDate).format("YYYY-MM-DD") ?? '1990-00-00',
+        EndDate: moment().format("YYYY-MM-DD"),
+        choiceByUpdateDate: true
+      }
+
+      dispatch(appActions.updateImportBLockers(params))
     }
   }
   const lastUpdate = space?.lastRequest?.EndDate ? `LastUpdate:${moment(space.lastRequest.EndDate).format("DD-MM-YYYY")}` : 'LastUpdate'
@@ -142,7 +150,7 @@ export const MainPage = () => {
           </IconButton>
           <IconButton onClick={handleUpdateData}>
             <ReplayIcon />
-            
+
           </IconButton>
           <IconButton onClick={() => {
             history.push("/instruction")

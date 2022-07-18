@@ -36,6 +36,7 @@ export interface ISpace {
   name: string,
   externalId: string,
   lastRequest?: IUpdateRequest
+  imported: boolean
 }
 
 export interface actionPayload {

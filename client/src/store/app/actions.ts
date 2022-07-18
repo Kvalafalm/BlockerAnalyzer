@@ -40,22 +40,14 @@ export const appActions = {
     dispatch(appActions.downloadSpaces())
   },
 
-  updateImportBLockers: (space: ISpace) => async (dispatch: any) => {
+  updateImportBLockers: (params: IUpdateRequest) => async (dispatch: any) => {
 
     const firstrequestUrl = `api/v1/ImportData/periodAsync`
     const headers = {
       "Content-Type": "application/json",
     }
-    if (!space.lastRequest?.EndDate) {
-      return false
-    }
 
-    const body: IUpdateRequest = {
-      idboard: space.externalId,
-      StartDate: moment(space.lastRequest?.EndDate).format("YYYY-MM-DD") ?? '1990-00-00',
-      EndDate: moment().format("YYYY-MM-DD"),
-      choiceByUpdateDate: true
-    }
+    const body: IUpdateRequest = params
 
     const options: RequestInit = {
       method: "POST",

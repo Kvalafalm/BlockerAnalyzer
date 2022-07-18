@@ -9,6 +9,17 @@ export default class spacesView {
     }
     return newArray;
   }
+  static prepareArrayOfExtertnalSpaces(incomingArray) {
+    const newArray: Array<any> = [];
+    for (const element of incomingArray) {
+      element.externalId = element.id
+      element.id = undefined
+      const newObject = new Space(element).exportForList()
+      newArray.push(newObject);
+    }
+    return newArray;
+
+  }
 }
 
 type statuses = {

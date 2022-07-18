@@ -1,3 +1,4 @@
+import { ISpace } from '../../../client/src/store/app/interface';
 import spaceModel from './space-model';
 import spacesView, { Space } from './space-view';
 
@@ -68,6 +69,22 @@ class spaceServices {
     const data = await spacesView.prepareArrayOfSpaces(documents);
     return data;
   }
+
+  async compareImportedSpacesAndExternalSpaces(projects: ISpace[]): Promise<ISpace[]> {
+    const importedSpaces = await this.getSpaceList();
+
+    if (importedSpaces && importedSpaces.length > 0) {
+      for (const space of importedSpaces) {
+        for (const externalSpace of projects) {
+          if (externalSpace.externalId == space.externalId?.toString()) {
+            externalSpace.imported = true;
+          }
+        }
+      }
+    }
+    return projects
+  }
+
 }
 
 export default new spaceServices();

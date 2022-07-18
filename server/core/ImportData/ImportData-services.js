@@ -152,10 +152,10 @@ class importDataServices {
 
   async getProjects() {
     const projects = await externalConnectionsService.getProjectList();
-    const data = await spacesView.prepareArrayOfSpaces(projects)
-    if (data.length === 0) {
-      return false;
-    }
+    
+    if (projects.length === 0) { return false }
+    const externalSpaces = await spacesView.prepareArrayOfExtertnalSpaces(projects)
+    const data = await spaceServices.compareImportedSpacesAndExternalSpaces(externalSpaces)
     return data;
   }
 

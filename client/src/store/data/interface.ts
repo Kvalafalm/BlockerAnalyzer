@@ -1,5 +1,5 @@
 import { Moment } from "moment";
-import { ISpace } from "../app/interface";
+import { ISpace} from "../app/interface";
 
 type BAdate = Moment | null
 

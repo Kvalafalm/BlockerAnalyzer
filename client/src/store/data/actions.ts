@@ -1,4 +1,5 @@
 import moment, { Moment } from "moment"
+import { ISpace } from "../app/interface"
 import { dataActionTypes, dataRow } from "./interface"
 
 export const dataActions = {
@@ -173,7 +174,7 @@ export const dataActions = {
     }
   },
 
-  downloadSpacesList: () => async (dispatch: any) => {
+  downloadSpacesListAndCompare: (importedSpaces: ISpace[] | undefined) => async (dispatch: any) => {
 
     const firstrequestUrl = `api/v1/importdata/project/list`
     const headers = {
