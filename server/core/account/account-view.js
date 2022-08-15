@@ -5,6 +5,7 @@ class accountView {
       externalServiceURL: accountModel.externalServiceURL,
       name: accountModel.name,
       login: accountModel.login,
+      id: accountModel._id.toString()
     };
 
     return params;

@@ -1,3 +1,4 @@
+import externalConnectionsService from '../externalConnections/externalConnections-service.js';
 import accountModel from './account-model.js';
 import accountView from './account-view.js';
 
@@ -44,6 +45,9 @@ class accountServices {
     const paramsForFront = await accountModel.findByIdAndUpdate(_id, {
       ...params,
     });
+
+    await externalConnectionsService.reloadConnection('')
+
     return paramsForFront;
   }
 

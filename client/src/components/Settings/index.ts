@@ -1,1 +1,1 @@
-export { Settings } from "./Settings.jsx"
+export { Settings } from "./Settings"

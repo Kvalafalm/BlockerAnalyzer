@@ -1,50 +1,49 @@
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Button, Box } from "@mui/material"
-import React, { useLayoutEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useState } from "react"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { ISpace } from "../../store/app/interface"
+import { ISpace, IUpdateRequest } from "../../store/app/interface"
 import { dataActions } from "../../store/data"
 import { RootState } from "../../store/reducers"
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import { appActions } from "../../store/app"
 
-export const ProjectAdd = () => {
+export const ProjectAdd = ({ paramsRequest }: { paramsRequest: IUpdateRequest }) => {
   const dispatch = useDispatch();
   const externalProjects = useSelector(
     (state: RootState): ISpace[] | undefined => state.dataReducer?.externalProjects, shallowEqual
   )
 
-  const importedProjects = useSelector(
-    (state: RootState): ISpace[] | undefined => state.appReducer?.spaces, shallowEqual
-  )
-
-  const [externalSpace, setExternalSpace] = useState<ISpace>({
+  const emptySpace: ISpace = {
     id: '',
     name: '',
     externalId: '',
     imported: false
+  }
+  const [externalSpace, setExternalSpace] = useState<ISpace>({
+    ...emptySpace
   });
 
   useLayoutEffect(() => {
     if (!externalProjects) {
-      dispatch(dataActions.downloadSpacesListAndCompare(importedProjects))
+      dispatch(dataActions.downloadSpacesListAndCompare())
     }
   });
 
-/*   const handleUpdateData = () => {
-    if (externalProjects && space.lastRequest) {
-      const params = {
-        idboard: externalProjects.externalId,
-        StartDate: moment(space.lastRequest?.EndDate).format("YYYY-MM-DD") ?? '1990-00-00',
-        EndDate: moment().format("YYYY-MM-DD"),
-        choiceByUpdateDate: true
-      }
-
-      dispatch(appActions.updateImportBLockers(params))
+  useEffect(() => {
+    if (!externalProjects) {
+      return
     }
-  } */
+    const curSpace = externalProjects.find((element) => {
+      return element.externalId == externalSpace.externalId
+    })
+
+    if (curSpace) {
+      setExternalSpace(curSpace)
+    }
+  }, [externalSpace, externalProjects])
+
   const handleChange = (event: SelectChangeEvent) => {
-    debugger
     if (!externalProjects) {
       return
     }
@@ -58,10 +57,37 @@ export const ProjectAdd = () => {
 
   }
 
+  const handleAddSpace = () => {
+    if (!externalSpace || externalSpace.externalId === '') {
+      return
+    }
+    dispatch(appActions.importSpace(externalSpace, paramsRequest))
+    dispatch(dataActions.downloadSpacesListAndCompare())
+  }
+  const handleRefresh = () => {
+    if (!externalSpace) {
+      return
+    }
+    if (paramsRequest.StartDate === null || paramsRequest.EndDate === null) {
+      return
+    }
+    dispatch(appActions.updateImportBLockers({ ...paramsRequest, idboard: externalSpace.externalId }))
+
+  }
+  const handleDeleteSpace = () => {
+    if (!externalSpace.id) {
+      return
+    }
+    setExternalSpace({
+      ...emptySpace
+    })
+    dispatch(appActions.deleteSpace(externalSpace.id))
+    dispatch(dataActions.downloadSpacesListAndCompare())
+  }
 
   const showBoards = externalProjects && externalProjects.length > 0
   return (
-    <FormControl sx={{ display: 'inline', m: 3, minWidth: 400 }}>
+    <FormControl sx={{ display: 'inline', m: 3, minWidth: 500 }}>
       <InputLabel id="spaceSelect-label">Space</InputLabel>
       <Select
         labelId="spaceSelect-label"
@@ -88,14 +114,14 @@ export const ProjectAdd = () => {
 
       {externalSpace.imported ?
         <>
-          <Button>
+          <Button onClick={handleRefresh}>
             refresh
           </Button>
-          <Button>
+          <Button onClick={handleDeleteSpace}>
             Delete
           </Button>
         </> :
-        <Button>
+        <Button onClick={handleAddSpace}>
           Add
         </Button>}
     </FormControl>

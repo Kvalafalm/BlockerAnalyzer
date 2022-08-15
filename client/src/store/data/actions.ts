@@ -1,5 +1,6 @@
 import moment, { Moment } from "moment"
-import { ISpace } from "../app/interface"
+import { appActions } from "../app"
+import { iNotification, ISpace } from "../app/interface"
 import { dataActionTypes, dataRow } from "./interface"
 
 export const dataActions = {
@@ -129,12 +130,32 @@ export const dataActions = {
 
     try {
       const response = await fetch(requestUrl, options)
-      const { result } = await response.json()
-      const statuses = prepareStatuses(result.statusLog)
-      dispatch(dataActions.setTimelineData(result.timelinedata))
-      dispatch(dataActions.setTimelineDataStatuses(statuses))
-    } catch (error) {
-      console.log(error)
+
+      if (response.status === 500) {
+        const notification: iNotification = { message: response.statusText, type: "error" }
+        dispatch(appActions.addNotification(notification))
+        return
+      }
+      const responseJSON = await response.json()
+
+      if (response.status === 400) {
+        debugger
+        const notification: iNotification = { message: responseJSON.message, type: "error" }
+        dispatch(appActions.addNotification(notification))
+      }
+
+      if (response.status === 200) {
+        const statuses = prepareStatuses(responseJSON.result.statusLog)
+        dispatch(dataActions.setTimelineData(responseJSON.result.timelinedata))
+        dispatch(dataActions.setTimelineDataStatuses(statuses))
+      }
+
+    } catch (error: any) {
+      if (error) {
+        const message: string = error.toString();
+        const notification: iNotification = { message, type: "error" }
+        dispatch(appActions.addNotification(notification))
+      }
     }
   },
   downloadBlockerListBySpace: (id: string) => async (dispatch: any) => {
@@ -150,8 +171,15 @@ export const dataActions = {
     }
 
     try {
-      const Response = await fetch(firstrequestUrl, options)
-      const dataBlokers: any = await Response.json()
+      const response = await fetch(firstrequestUrl, options)
+
+      if (response.status === 500) {
+        const notification: iNotification = { message: response.statusText, type: "error" }
+        dispatch(appActions.addNotification(notification))
+        return
+      }
+
+      const dataBlokers: any = await response.json()
       const dataJson: any = await Object.values(dataBlokers.result)
 
       for (const element of dataJson) {
@@ -169,12 +197,16 @@ export const dataActions = {
       }
 
       dispatch(dataActions.updateDataJson(dataJson))
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      if (error) {
+        const message: string = error.toString();
+        const notification: iNotification = { message, type: "error" }
+        dispatch(appActions.addNotification(notification))
+      }
     }
   },
 
-  downloadSpacesListAndCompare: (importedSpaces: ISpace[] | undefined) => async (dispatch: any) => {
+  downloadSpacesListAndCompare: () => async (dispatch: any) => {
 
     const firstrequestUrl = `api/v1/importdata/project/list`
     const headers = {
@@ -187,11 +219,26 @@ export const dataActions = {
     }
 
     try {
-      const Response = await fetch(firstrequestUrl, options)
-      const list: any = await Response.json()
-      dispatch(dataActions.setExternalSpaceLists(list.result))
-    } catch (error) {
-      console.log(error)
+      const response = await fetch(firstrequestUrl, options)
+
+      if (response.status === 500) {
+        const notification: iNotification = { message: response.statusText, type: "error" }
+        dispatch(appActions.addNotification(notification))
+        return
+      }
+      const data: any = await response.json()
+      /*       if (response.status === 400) {
+              const notification: iNotification = { message: data.message, type: "error" }
+              dispatch(appActions.addNotification(notification))
+            } */
+
+      dispatch(dataActions.setExternalSpaceLists(data.result))
+    } catch (error: any) {
+      if (error) {
+        const message: string = error.toString();
+        const notification: iNotification = { message, type: "error" }
+        dispatch(appActions.addNotification(notification))
+      }
     }
   },
 

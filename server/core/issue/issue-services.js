@@ -3,7 +3,7 @@ import { getArrayOfStatus } from '../ImportData/ImportData-library.js';
 import moment from 'moment';
 import BlockerServices from '../bloker/Blocker-services.js';
 import { getColorByStatus } from '../../../library/library';
-const formatExportDate = 'YYYY-MM-DD HH';
+const formatExportDate = 'YYYY-MM-DD HH:mm';
 
 class issueServices {
   async getIssue(id, parametrs) {
@@ -98,9 +98,9 @@ class issueServices {
       worklogs = await this.getWorklogs(arrayOfIssue);
       for (const worklog of worklogs) {
         const row = {
-          category: 'worklog',
+          category: `worklog${worklog.author}`,
           ...worklog,
-          color: 'yellow',
+          color: 'green',
         };
 
         timelinedata.push(row);
@@ -123,18 +123,19 @@ class issueServices {
       const worklogRows =
         await externalConnectionsService.getIssuesWorklogByIdIssue(issue.key);
       for (const worklog of worklogRows) {
-        const description = `${issue.fields.summary} ${
-          worklog.comment ? worklog.comment : ' - ' + worklog.comment
-        }`;
+
+        const description = `2${issue.fields.summary} - ${worklog.author.displayName}`;
+
         const end = moment(worklog.started)
           .add(worklog.timeSpentSeconds, 's')
           .format(formatExportDate);
+
         const start = moment(worklog.started).format(formatExportDate);
 
         const row = {
           start,
           end,
-          task: `${worklog.author.displayName} - ${issue.fields.summary}`,
+          task: `1${issue.fields.summary} - ${worklog.author}`,
           description,
           author: worklog.author.displayName,
           timeInSecond: worklog.timeSpentSeconds,
@@ -143,7 +144,6 @@ class issueServices {
 
         worklogs.push(row);
       }
-      issueServices;
     }
 
     return worklogs;
@@ -175,9 +175,8 @@ class issueServices {
       for (const iRow of subtaskStatusLog) {
         subtasksStatusLog.push({
           ...iRow,
-          issuetype: `${subtask.fields.issuetype.name}${
-            subtask.fields.priority.id - 1
-          }`,
+          issuetype: `${subtask.fields.issuetype.name}${subtask.fields.priority.id - 1
+            }`,
         });
       }
     }
@@ -253,7 +252,6 @@ const getTypeStatus = (projectStatuses, statusId) => {
     return e.id === statusId;
   });
   if (!status) {
-    console.log("Неизвестный статус ",statusId);
     return 0;
   }
   return status.typeOfStatus;

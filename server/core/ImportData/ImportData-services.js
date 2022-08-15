@@ -23,27 +23,40 @@ class importDataServices {
     if (!idboard) {
       throw ApiError.BadRequest('No req perams');
     }
-
+    const start = moment().format("YYYY-MM-DD HH-mm-ss");
     const params = {
       idboard,
       StartDate: moment(StartDate),
       EndDate: moment(EndDate),
       choiceByUpdateDate,
+      inProgress: true,
     };
-    console.log(idboard)
-    const { _id } = await spaceServices.getSpaceByExternalId(idboard);
-    if (!_id) {
-      return null
-    }
-    const issues = await externalConnectionsService.getIssuesKeyFromKanbanBoard(
-      params
-    );
-    await spaceServices.UpdateLastRequest(idboard, params)
 
-    if (issues.length === 0) {
-      return { result: 'empty array' };
+    let result = {}
+    const newParams = { ...params, inProgress: false }
+    try {
+      await spaceServices.UpdateLastRequest(idboard, params)
+      const { _id } = await spaceServices.getSpaceByExternalId(idboard);
+      if (!_id) {
+        return null
+      }
+      const issues = await externalConnectionsService.getIssuesKeyFromKanbanBoard(
+        params
+      );
+      if (issues.length === 0) {
+        return { result: 'empty array' };
+      }
+      result = await this.importIssuesByID(issues, _id);
+      newParams.result = result
+      newParams.status = `End imports ${moment().format("YYYY-MM-DD HH-mm-ss")}`
+    } catch (error) {
+      newParams.status = `Erroe ${moment().format("YYYY-MM-DD HH-mm-ss")}`
+      newParams.error = error
+    } finally {
+      result.start = start;
+      result.end = moment().format("YYYY-MM-DD HH-mm-ss");
+      await spaceServices.UpdateLastRequest(idboard, newParams)
     }
-    const result = this.importIssuesByID(issues, _id);
 
     return result;
   }
@@ -74,8 +87,6 @@ class importDataServices {
 
         await BlockerServices.updateBlocker(element.idBloker, element);
       } catch (error) {
-        //console.log(error.idIssue, error.idBloker);
-        console.log(error);
         errorsCount += 1;
       }
     }
@@ -140,7 +151,7 @@ class importDataServices {
     const projectStatuses = await externalConnectionsService.getProjectStatuses(
       projectId
     );
-    if (projectStatuses.length === 0) {
+    if (projectStatuses && projectStatuses.length === 0) {
       return false;
     }
     const statuses = spaceServices.updateSpace(projectId, {
@@ -152,8 +163,8 @@ class importDataServices {
 
   async getProjects() {
     const projects = await externalConnectionsService.getProjectList();
-    
-    if (projects.length === 0) { return false }
+
+    if (!projects || projects.length === 0) { return false }
     const externalSpaces = await spacesView.prepareArrayOfExtertnalSpaces(projects)
     const data = await spaceServices.compareImportedSpacesAndExternalSpaces(externalSpaces)
     return data;
@@ -163,7 +174,7 @@ class importDataServices {
     const projectStatuses = await externalConnectionsService.getProjectStatuses(
       projectId
     );
-    if (projectStatuses.length === 0) {
+    if (projectStatuses && projectStatuses.length === 0) {
       return false;
     }
     const statuses = spaceServices.updateOrCreateSpace(projectId, {

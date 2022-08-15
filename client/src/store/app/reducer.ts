@@ -2,6 +2,7 @@ import {
   actionPayload,
   appActionTypes,
   iAppReducerState,
+  iNotification,
 } from "./interface"
 
 const initialState: iAppReducerState = {
@@ -9,22 +10,31 @@ const initialState: iAppReducerState = {
   errors: [],
   showFilter: false,
   spaces: [],
+  notifications: [],
+  accountData: {
+    externalServiceType: '',
+    externalServiceURL: '',
+    name: '',
+    login: '',
+    password: ''
+  }
 }
 
 export const appReducer = (state = initialState, action: actionPayload) => {
   switch (action.type) {
-    case appActionTypes.PUSH_ERROR:
-      const errors: Array<any> = state.errors.slice()
-      errors.push(action.payload)
-      return { ...state, errors }
-    case appActionTypes.CLEAR_ERRORS:
-      return { ...state, errors: [] }
+    case appActionTypes.ADD_NOTIFICATION:
+      const notifications: iNotification[] = state.notifications.concat(action.payload)
+      return { ...state, notifications }
+    case appActionTypes.CLEAR_NOTIFICATIONS:
+      return { ...state, notifications: [] }
     case appActionTypes.SET_SPACES:
       return { ...state, spaces: action.payload }
     case appActionTypes.SET_CURRENTSPACE:
       return { ...state, currentSpace: action.payload }
     case appActionTypes.CLEAN:
       return { ...initialState }
+    case appActionTypes.SET_ACCOUNDDATA:
+      return { ...state, accountData: action.payload }
     default:
       return state
   }

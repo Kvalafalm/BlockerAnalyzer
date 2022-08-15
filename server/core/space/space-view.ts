@@ -1,5 +1,3 @@
-import { type } from "os";
-
 export default class spacesView {
   static prepareArrayOfSpaces(incomingArray) {
     const newArray: Array<any> = [];

@@ -45,7 +45,9 @@ const addBlockersFromChangeLog = (BlockerObj, changeLog, emptyBlocker) => {
 };
 
 const getStatusFromChangelog = (BlockerObj, changeLog, FirstRow) => {
+
   const tableOfStatus = getArrayOfStatus(changeLog, FirstRow);
+
   for (const bloker of BlockerObj) {
     for (const row of tableOfStatus) {
       let end = row.end;
@@ -125,10 +127,18 @@ const getArrayOfStatus = (changeLog, FirstRow) => {
     for (const itemField of item.items) {
       if (itemField.field.toLowerCase() === 'status') {
         if (firstElement) {
+
+          newArray.push({
+            value: itemField.fromString,
+            valueId: itemField.from,
+            start: FirstRow.start,
+            end:moment(item.created)
+          });
+
           row = {
             value: itemField.toString,
             valueId: itemField.to,
-            start: FirstRow.start,
+            start: moment(item.created)
           };
           firstElement = false;
         }
@@ -286,8 +296,8 @@ const extractTagsFromText = text => {
         );
         min
           ? tags.push(
-              element.substring(0, min).replaceAll(' ', '').toLowerCase()
-            )
+            element.substring(0, min).replaceAll(' ', '').toLowerCase()
+          )
           : '';
       }
     });

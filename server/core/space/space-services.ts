@@ -21,16 +21,16 @@ class spaceServices {
     return true;
   }
 
-  async updateOrCreateSpace(projectId: string, body): Promise<boolean> {
+  async updateOrCreateSpace(externalId: string, body): Promise<boolean> {
     const projectUpdated = await spaceModel.findOneAndUpdate(
-      { projectId: projectId },
+      { externalId },
       {
         ...body,
       }
     );
     if (!projectUpdated) {
       const project = await new spaceModel({
-        projectId,
+        externalId,
         ...body,
       });
       await project.save();
@@ -77,7 +77,8 @@ class spaceServices {
       for (const space of importedSpaces) {
         for (const externalSpace of projects) {
           if (externalSpace.externalId == space.externalId?.toString()) {
-            externalSpace.imported = true;
+            externalSpace.imported = true
+            externalSpace.id = space.id
           }
         }
       }
@@ -85,6 +86,10 @@ class spaceServices {
     return projects
   }
 
+  async deleteSpace(id: string): Promise<boolean> {
+    const result = await spaceModel.findByIdAndDelete(id)
+    return result
+  }
 }
 
 export default new spaceServices();

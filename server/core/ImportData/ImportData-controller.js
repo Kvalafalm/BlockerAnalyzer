@@ -4,10 +4,10 @@ import ImportDataServices from './ImportData-services.js';
 class ImportDataController {
   async importDataOne(req, res, next) {
     try {
-      const { id } = req?.params;
+      const { spaceid, id } = req?.params;
       let result;
-      if (id) {
-        result = await ImportDataServices.importIssuesByID([id], "spaceId");
+      if (id && spaceid) {
+        result = await ImportDataServices.importIssuesByID([id], spaceid);
       }
 
       await res.status(200).json({

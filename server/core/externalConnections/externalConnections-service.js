@@ -1,20 +1,23 @@
+import ApiError from '../../utils/exceptions/api_error';
 import accountServices from '../account/account-services.js';
 import jiraConnections from './externalConnections-jiraServer.js';
+
 
 class externalConnectionsService {
   constructor() {
     accountServices
       .getSettingForExternalConnection()
-      .then(({ externalServiceType, externalServiceURL, login, password }) => {
-        this.URL = externalServiceURL;
-        this.type = externalServiceType;
-        this.login = login;
-        this.password = password;
-        console.log(this);
+      .then((connectionData) => {
+        this.LoadConnectionData(connectionData)
       });
   }
 
   async getIssuesByID(keys) {
+        
+    if (!this.connetion) {
+      return undefined
+    }
+
     const fields = [
       'project',
       'priority',
@@ -32,7 +35,7 @@ class externalConnectionsService {
         startAt: index * maxResult - 1,
         maxResult,
       };
-      const { issues } = await jiraConnections.getIssuesByID(
+      const { issues } = await this.connetion.getIssuesByID(
         keys,
         fields,
         expand,
@@ -45,6 +48,11 @@ class externalConnectionsService {
   }
 
   async getIssuesKeyFromKanbanBoard(params) {
+        
+    if (!this.connetion) {
+      return undefined
+    }
+
     let jql = '';
     const fields = ['key'];
 
@@ -62,7 +70,7 @@ class externalConnectionsService {
       )}%22%20`;
     }
 
-    const issues = await jiraConnections.getIssuesKeyFromKanbanBoard(
+    const issues = await this.connetion.getIssuesKeyFromKanbanBoard(
       params.idboard,
       fields,
       jql
@@ -72,17 +80,32 @@ class externalConnectionsService {
   }
 
   async getCommentsByIdIssue(id) {
-    const { comments } = await jiraConnections.getCommentsByIdIssue(id);
+        
+    if (!this.connetion) {
+      return undefined
+    }
+
+    const { comments } = await this.connetion.getCommentsByIdIssue(id);
     return comments;
   }
 
   async getIssuesWorklogByIdIssue(id) {
-    const { worklogs } = await jiraConnections.getWorklogByIdIssue(id);
+
+    if (!this.connetion) {
+      return undefined
+    }
+
+    const { worklogs } = await this.connetion.getWorklogByIdIssue(id);
     return worklogs;
   }
 
   async getProjectStatuses(id) {
-    const data = await jiraConnections.getProjectStatuses(id);
+
+    if (!this.connetion) {
+      return undefined
+    }
+
+    const data = await this.connetion.getProjectStatuses(id);
     let statuses = [];
     for (const issueType of data) {
       for (const status of issueType.statuses) {
@@ -108,9 +131,84 @@ class externalConnectionsService {
   }
 
   async getProjectList() {
-    const data = await jiraConnections.getProjectList();
+    if (!this.connetion) {
+      return undefined
+    }
+    const data = await this.connetion.getProjectList();
     return data;
   }
+
+  LoadConnectionData(param) {
+
+    if (!param) {
+      return
+    }
+
+    if (param.URL === '' || param.login === '' || param.password === '') {
+      return
+    }
+
+    this.URL = param.externalServiceURL;
+    this.type = param.externalServiceType;
+    this.login = param.login;
+    this.password = param.password;
+
+    this.connetion = getConnector(param.externalServiceType, param)
+
+  }
+  async reloadConnection(id) {
+    try {
+      const connectionData = await accountServices.getSettingForExternalConnection(id)
+      await this.LoadConnectionData(connectionData)
+      
+    } catch (error) {
+      throw ApiError.ExternalConnectionError();
+    }
+  }
+  async testConnection(param) {
+    const connection = getConnector(param.externalServiceType, param)
+    if (connection) {
+      return await connection.testConnection(param)
+    } else {
+    }
+
+  }
+
 }
+
+const getConnector = (externalServiceType, param) => {
+  let connection
+  switch (externalServiceType) {
+    case ConnectionTypes.JIRA82:
+      connection = new jiraConnections(param)
+      break;
+    case ConnectionTypes.JIRACLOUD:
+      break;
+    case ConnectionTypes.KAITEN:
+      break;
+    default:
+      connection = new jiraConnections(param)
+      break;
+  }
+  return connection
+}
+
+export const ConnectionTypes = {
+  JIRA82: "Connection.jira8.2",
+  JIRACLOUD: "Connection.jiraCloud",
+  KAITEN: "Connection.kaiten",
+}
+
+
+/* export interface ExternalConnector {
+  getIssuesByID: Function;
+  getIssuesKeyFromKanbanBoard: Function;
+  getCommentsByIdIssue: Function;
+  getWorklogByIdIssue: Function;
+  getProjectStatuses: Function;
+  getProjectList: Function;
+  onChange(name: string): any
+  
+} */
 
 export default new externalConnectionsService();

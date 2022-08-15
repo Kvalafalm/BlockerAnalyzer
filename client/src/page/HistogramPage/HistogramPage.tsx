@@ -16,10 +16,6 @@ export const HistogramPage = () => {
 
   const { convertDataToHistogrammChartData } = useHistogramPageHooks()
   const dataForHC = convertDataToHistogrammChartData(dataFiltred)
-  /*   const dataForHC = useMemo(() => {
-      convertDataToHistogrammChartData(dataFiltred)
-      console.log("calculate dataForHC")
-    }, [dataFiltred]) */
 
   if (!dataFiltred && tags.length === 0) {
     return (

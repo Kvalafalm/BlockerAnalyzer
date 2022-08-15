@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { styled } from "@mui/material/styles"
 import { Route, Switch as SwitchR } from "react-router"
 import { useHistory } from "react-router-dom"
+import { useSnackbar } from "notistack"
 import {
   BublecharPage,
   HistogramPage,
@@ -26,7 +27,7 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings"
 import ReplayIcon from '@mui/icons-material/Replay';
 import IconButton from "@mui/material/IconButton"
-import { useLayoutEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useState } from "react"
 import MuiAppBar from "@mui/material/AppBar"
 import { Box } from "@mui/system"
 import { appActions } from "../../store/app"
@@ -91,10 +92,24 @@ export const MainPage = () => {
   const [showFilter, setShowFilter] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(appActions.downloadStartingDataFromServer())
   }, [])
 
+  const notifications = useSelector(
+    (state) => state.appReducer?.notifications
+  )
+  const { enqueueSnackbar } = useSnackbar();
+  const dispath = useDispatch()
+  if (notifications.length > 0) {
+    for (const notification of notifications) {
+      enqueueSnackbar(notification.message, {
+        variant: notification.type,
+      });
+    }
+
+    dispath(appActions.clearAppNotifications())
+  }
   const handleChangeSwitch = () => {
     setShowFilter(!showFilter)
   }
@@ -112,11 +127,16 @@ export const MainPage = () => {
         EndDate: moment().format("YYYY-MM-DD"),
         choiceByUpdateDate: true
       }
-
       dispatch(appActions.updateImportBLockers(params))
     }
   }
-  const lastUpdate = space?.lastRequest?.EndDate ? `LastUpdate:${moment(space.lastRequest.EndDate).format("DD-MM-YYYY")}` : 'LastUpdate'
+  let lastUpdate = ""
+  if (space?.lastRequest?.inProgress) {
+    lastUpdate = "Updateing";
+  } else if (space?.lastRequest?.EndDate) {
+    lastUpdate = `Updated ${moment(space.lastRequest.EndDate).format("DD-MM-YYYY")}`
+  }
+
   const handleDrawerOpenClose = () => {
     setOpen(!open)
   }
@@ -148,9 +168,8 @@ export const MainPage = () => {
           <IconButton onClick={handleShowCloseSettings}>
             <SettingsIcon />
           </IconButton>
-          <IconButton onClick={handleUpdateData}>
+          <IconButton onClick={handleUpdateData} disabled={space?.lastRequest?.inProgress}>
             <ReplayIcon />
-
           </IconButton>
           <IconButton onClick={() => {
             history.push("/instruction")

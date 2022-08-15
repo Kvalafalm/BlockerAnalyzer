@@ -14,6 +14,10 @@ class ApiError extends Error {
     return new ApiError(401, 401, 'Пользователь не авторизован');
   }
 
+  static ExternalConnectionError() {
+    return new ApiError(401, 401, 'Error connection to external service');
+  }
+  
   static BadRequest(message: string, errors = []) {
     return new ApiError(400, 400, message, errors);
   }

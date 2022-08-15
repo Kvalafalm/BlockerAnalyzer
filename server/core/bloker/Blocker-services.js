@@ -37,6 +37,20 @@ class BlockerServices {
     }
     return document;
   }
+
+  async deleteBlockersByIdSapce(id) {
+
+    let document = await BlockerModel.deleteMany({ idSpace: mongoose.Types.ObjectId(id) });
+
+    if (!document) {
+      const blocker = await new BlockerModel({ ...body });
+      await blocker.save();
+      document = await blocker;
+    }
+    return document;
+  }
+
+
 }
 
 export default new BlockerServices();

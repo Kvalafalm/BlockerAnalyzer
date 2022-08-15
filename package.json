@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@mui/x-date-pickers": "^5.0.0-beta.1",
     "concurrently": "^7.1.0",
     "config": "^3.3.7",
     "cross-env": "^7.0.3",
@@ -20,7 +21,7 @@
     "typescript": "^4.7.2"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production node app.js",
+    "start": "cross-env NODE_ENV=production ts-node app.ts",
     "server": "nodemon",
     "client": "npm run start --prefix client",
     "client:install": "npm install --prefix client",

@@ -5,4 +5,8 @@ const routerSpace = Router();
 
 routerSpace.get('/list', spaceController.getSpaceList);
 
+routerSpace.post('/', spaceController.createSpace);
+
+routerSpace.delete('/:id', spaceController.deleteSpace);
+
 export default routerSpace;

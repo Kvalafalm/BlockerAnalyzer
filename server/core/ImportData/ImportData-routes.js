@@ -5,7 +5,7 @@ import ImportDataController from './ImportData-controller.js';
 const ImportDataController = require('./ImportData-controller.cjs'); */
 const routerImportData = Router();
 
-routerImportData.get('/:id', ImportDataController.importDataOne);
+routerImportData.get('/space/:spaceid/id/:id', ImportDataController.importDataOne);
 
 routerImportData.post('/period', ImportDataController.importDataPerPeriod);
 
