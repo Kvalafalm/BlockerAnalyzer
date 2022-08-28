@@ -105,13 +105,13 @@ class importDataServices {
     const comments = await externalConnectionsService.getCommentsByIdIssue(
       JiraIssue.key
     );
+    const URL = await externalConnectionsService.getURL()
     const issue = {
       project: JiraIssue.fields.project.name,
       idIssue: JiraIssue.key,
       priority: JiraIssue.fields.priority.id - 1,
       titleIssue: JiraIssue.fields.summary,
-      linkIssue: `${config.get('protocol')}://${config.get('jira')}/browse/${JiraIssue.key
-        }`,
+      linkIssue: `${URL}/browse/${JiraIssue.key}`,
       typeIssue: JiraIssue.fields.issuetype.name,
     };
 

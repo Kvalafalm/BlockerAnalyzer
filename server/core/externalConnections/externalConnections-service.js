@@ -13,7 +13,7 @@ class externalConnectionsService {
   }
 
   async getIssuesByID(keys) {
-        
+
     if (!this.connetion) {
       return undefined
     }
@@ -48,7 +48,7 @@ class externalConnectionsService {
   }
 
   async getIssuesKeyFromKanbanBoard(params) {
-        
+
     if (!this.connetion) {
       return undefined
     }
@@ -80,7 +80,7 @@ class externalConnectionsService {
   }
 
   async getCommentsByIdIssue(id) {
-        
+
     if (!this.connetion) {
       return undefined
     }
@@ -160,7 +160,7 @@ class externalConnectionsService {
     try {
       const connectionData = await accountServices.getSettingForExternalConnection(id)
       await this.LoadConnectionData(connectionData)
-      
+
     } catch (error) {
       throw ApiError.ExternalConnectionError();
     }
@@ -174,6 +174,9 @@ class externalConnectionsService {
 
   }
 
+  async getURL() {
+    return this.URL
+  }
 }
 
 const getConnector = (externalServiceType, param) => {
