@@ -7,6 +7,7 @@ export const InstructionsPage = `
           <li>Histogramm - Анализ по длительности блокировок</li>
           <li>
             Bublechart - Показывает наиболее критичные блокировки(красная зона)
+            <img src="/public/img/HIstgogramChart.png">
           </li>
           <li>Stakedarea chart - Показывает динамику появления блокировок</li>
         </ul>
