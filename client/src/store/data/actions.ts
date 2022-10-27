@@ -245,7 +245,7 @@ export const dataActions = {
 }
 
 const prepareStatuses = (payload: any) => {
-  const statuses = []
+  const statuses: Array<any> = []
   let id = 0
   for (const iterator of payload) {
     const end = iterator.end ? moment(iterator.end) : moment()

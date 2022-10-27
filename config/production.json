@@ -1,4 +1,4 @@
 {
   "port": 80,
-  "mongoUri": "mongodb+srv://USER:PASSSWORD@URL/DATABASE"
+  "mongoUri": "mongodb+srv://USER:PASSSWORD@URL:PORT/DATABASE"
 }

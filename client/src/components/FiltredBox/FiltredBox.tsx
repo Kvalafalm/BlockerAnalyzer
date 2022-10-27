@@ -27,9 +27,9 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }))
 export const FiltredBox = (props: any) => {
-/*   const { tags, typesTask, projects, priorites, statuses } =
-    useSelector((state: RootState): iAppReducerState => state.appReducer)
- */
+  /*   const { tags, typesTask, projects, priorites, statuses } =
+      useSelector((state: RootState): iAppReducerState => state.appReducer)
+   */
   const { tags, typesTask, projects, priorites, statuses, filter } =
     useSelector((state: RootState): iDataReducerState => state.dataReducer)
 
@@ -44,7 +44,7 @@ export const FiltredBox = (props: any) => {
 
   const dispatch = useDispatch()
   const handleChangeProjects = (event: any) => {
-    const value = []
+    const value: Array<any> = []
     const options = event.target
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
@@ -70,7 +70,7 @@ export const FiltredBox = (props: any) => {
     dispatch(dataActions.clearFilter())
   }
   const handleChangeTags = (event: any) => {
-    const value = []
+    const value: Array<any> = []
     const options = event.target
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
@@ -81,7 +81,7 @@ export const FiltredBox = (props: any) => {
   }
 
   const handleChangePriorites = (event: any) => {
-    const value = []
+    const value: Array<any> = []
     const options = event.target
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
@@ -92,7 +92,7 @@ export const FiltredBox = (props: any) => {
   }
 
   const handleChangeStatus = (event: any) => {
-    const value = []
+    const value: Array<any> = []
     const options = event.target
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
@@ -103,7 +103,7 @@ export const FiltredBox = (props: any) => {
   }
 
   const handleChangeTypesTask = (event: any) => {
-    const value = []
+    const value: Array<any> = []
     const options = event.target
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
